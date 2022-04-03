@@ -1,5 +1,6 @@
 import { auth as AuthRoutes } from "./modules/Auth";
 import { Router } from "express";
+import { isAuthenticated } from "./middlewares/isAuthenticated";
 
 //Base router for all categories
 export const apiV1 = Router();
