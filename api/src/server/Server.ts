@@ -50,6 +50,7 @@ export class Server {
       });
     });
 
+    //TEMPORARY, CHANGE LATER
     this.app.get("/v1/note/read", async (req, res) => {
         const { noteId } = req.body;
     
@@ -66,6 +67,30 @@ export class Server {
         }
     
         res.json({ success: true, note: note });
+    });
+
+    this.app.get("/v1/note/update", async (req, res) => {
+      const { noteId, body } = req.body;
+
+      console.log(noteId)
+
+      const note = await prisma.note.update({
+        where: {
+          id: noteId,
+        },
+
+        data: {
+          body: body
+        }
+      });
+
+      console.log(note)
+
+      if (!note) {
+        res.json({ success: false, message: "That note doesn't exist!" });
+      }
+
+      res.json({ success: true, note: note });
     });
 
     this.app.use("/v1", apiV1);
