@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { prisma } from '../../../db/index'
+import { prisma } from "../../../db/index";
 
 //Reads a specific note
 export const ReadNoteById = () => {
@@ -8,6 +8,8 @@ export const ReadNoteById = () => {
   router.get("/", async (req, res) => {
     const { noteId } = req.body;
 
+    console.log(noteId)
+
     const note = await prisma.note.findFirst({
       where: {
         id: noteId,
@@ -15,7 +17,7 @@ export const ReadNoteById = () => {
     });
 
     if (!note) {
-      return res.json({ success: false, message: "That note doesn't exist!" });
+      res.json({ success: false, message: "That note doesn't exist!" });
     }
 
     res.json({ success: true, note: note });

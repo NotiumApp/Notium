@@ -5,7 +5,7 @@ export const CreateNote = () => {
   const router = Router();
 
   router.get("/", async (req, res) => {
-    console.log(res.locals.user)
+    console.log(res.locals.user);
   });
 
   return router;

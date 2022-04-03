@@ -1,6 +1,7 @@
 import { apiV1 } from "../api/v1/BaseRouter";
 import express, { Application } from "express";
 import { firebaseAdminSetup } from "../util/FirebaseAdminSetup";
+import { prisma } from "../api/v1/db/index";
 import cors from "cors";
 
 //Server configuration and setup
@@ -47,6 +48,24 @@ export class Server {
         success: true,
         message: "Notium API",
       });
+    });
+
+    this.app.get("/v1/note/read", async (req, res) => {
+        const { noteId } = req.body;
+    
+        console.log(noteId)
+    
+        const note = await prisma.note.findFirst({
+          where: {
+            id: noteId,
+          },
+        });
+    
+        if (!note) {
+          res.json({ success: false, message: "That note doesn't exist!" });
+        }
+    
+        res.json({ success: true, note: note });
     });
 
     this.app.use("/v1", apiV1);
