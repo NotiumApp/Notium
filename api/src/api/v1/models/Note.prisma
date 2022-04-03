@@ -1,0 +1,4 @@
+model Note {
+    id String @id @default(uuid())
+    title String
+}
