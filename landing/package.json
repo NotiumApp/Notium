@@ -1,5 +1,5 @@
 {
-  "name": "notium-waitlist",
+  "name": "landing",
   "private": true,
   "scripts": {
     "dev": "next dev",
