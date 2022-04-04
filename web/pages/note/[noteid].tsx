@@ -53,7 +53,7 @@ const NotePage: NextPage<NotePageProps> = () => {
             className="border border-accent-primary outline-0 min-h-screen resize-none p-4 w-1/2"
           />
           <ReactMarkdown
-            className="min-h-screen overflow-y-auto w-1/2"
+            className="h-full overflow-y-auto w-1/2"
             remarkPlugins={[remarkGfm]}
             children={body}
             components={{
@@ -75,8 +75,6 @@ const NotePage: NextPage<NotePageProps> = () => {
               },
             }}
           />
-          {/* {body}
-          </ReactMarkdown> */}
         </div>
         <button
           className="prose"
