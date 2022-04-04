@@ -2,7 +2,9 @@ import { apiV1 } from "../api/v1/BaseRouter";
 import express, { Application } from "express";
 import { firebaseAdminSetup } from "../util/FirebaseAdminSetup";
 import { prisma } from "../api/v1/db/index";
+import { isAuthenticated } from "../api/v1/middlewares/isAuthenticated";
 import cors from "cors";
+
 
 //Server configuration and setup
 export class Server {
@@ -51,7 +53,7 @@ export class Server {
     });
 
     //TEMPORARY, CHANGE LATER
-    this.app.get("/v1/note/read", async (req, res) => {
+    this.app.post("/v1/note/read", isAuthenticated, async (req, res) => {
         const { noteId } = req.body;
     
         console.log(noteId)
@@ -61,6 +63,9 @@ export class Server {
             id: noteId,
           },
         });
+
+        console.log(res.locals.user)
+        console.log(note)
     
         if (!note) {
           res.json({ success: false, message: "That note doesn't exist!" });
@@ -69,7 +74,7 @@ export class Server {
         res.json({ success: true, note: note });
     });
 
-    this.app.get("/v1/note/update", async (req, res) => {
+    this.app.put("/v1/note/update", async (req, res) => {
       const { noteId, body } = req.body;
 
       console.log(noteId)
@@ -91,6 +96,17 @@ export class Server {
       }
 
       res.json({ success: true, note: note });
+    });
+
+    //TEMPORARY, CHANGE LATER
+    this.app.get("/v1/note/read/all", async (req, res) => {
+      const notes = await prisma.note.findMany({});
+
+      if (!notes) {
+        res.json({ success: false, message: "There are currently no notes" });
+      }
+
+      res.json({ success: true, notes: notes });
     });
 
     this.app.use("/v1", apiV1);
