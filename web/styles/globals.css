@@ -25,7 +25,7 @@
     font-size: 48px;
     line-height: 60px;
     letter-spacing: -0.02em;
-    color: white;
+    color: black;
   }
 
   h2 {
@@ -33,34 +33,34 @@
     font-size: 34px;
     line-height: 50px;
     letter-spacing: -0.01em;
-    color: white;
+    color: black;
   }
 
   h3 {
     font-weight: bold;
     font-size: 27px;
     line-height: 40px;
-    color: white;
+    color: black;
   }
 
   h4 {
     font-weight: bold;
     font-size: 20px;
     line-height: 30px;
-    color: white;
+    color: black;
   }
 
   p {
     font-size: 14px;
     line-height: 22px;
     letter-spacing: 0.01em;
-    color: white;
+    color: black;
   }
 
   .small {
     font-size: 12px;
     line-height: 18px;
     letter-spacing: 0.01em;
-    color: white;
+    color: black;
   }
 }
