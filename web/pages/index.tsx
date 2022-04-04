@@ -1,6 +1,7 @@
 import { NextPage } from "next/types";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Sidebar } from "../components/Sidebar";
 import { auth } from "../util/initFirebase";
 
 const Home: NextPage = () => {
@@ -12,7 +13,12 @@ const Home: NextPage = () => {
         })
       : null;
   }, [user]);
-  return <div>{user?.email}</div>;
+  return (
+    <>
+      <Sidebar />
+      <div className="ml-20">{user?.email}</div>
+    </>
+  );
 };
 
 export default Home;
