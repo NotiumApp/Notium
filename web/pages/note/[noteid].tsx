@@ -25,14 +25,14 @@ const NotePage: NextPage<NotePageProps> = () => {
     user?.getIdToken(true).then(async (idToken) => {
       const { data } = await api({
         url: "/note/read/",
-        method: "GET",
+        method: "POST",
         data: {
           authToken: idToken,
           noteId: router.query.noteid,
         },
       });
 
-      console.log(data);
+      console.log(data, router.query.noteid);
 
       setNotesMetaData(data.note);
       setBody(data.note.body);
@@ -44,6 +44,24 @@ const NotePage: NextPage<NotePageProps> = () => {
       <Sidebar />
       <div className="ml-20 min-h-screen">
         <h1>{notes.title}</h1>
+        <button
+          className="px-4 py-2 rounded-lg bg-accent text-white"
+          onClick={() => {
+            user?.getIdToken(true).then(async (idToken) => {
+              const { data } = await api({
+                url: "/note/update/",
+                method: "PUT",
+                data: {
+                  authToken: idToken,
+                  noteId: router.query.noteid,
+                  body: body,
+                },
+              });
+            });
+          }}
+        >
+          Update
+        </button>
         <div className="flex space-x-4 h-full">
           <textarea
             value={body}
@@ -53,7 +71,7 @@ const NotePage: NextPage<NotePageProps> = () => {
             className="border border-accent-primary outline-0 min-h-screen resize-none p-4 w-1/2"
           />
           <ReactMarkdown
-            className="h-full overflow-y-auto w-1/2"
+            className="h-full p-4 overflow-y-auto w-1/2"
             remarkPlugins={[remarkGfm]}
             children={body}
             components={{
@@ -76,24 +94,6 @@ const NotePage: NextPage<NotePageProps> = () => {
             }}
           />
         </div>
-        <button
-          className="prose"
-          onClick={() => {
-            user?.getIdToken(true).then(async (idToken) => {
-              const { data } = await api({
-                url: "/note/update/",
-                method: "PUT",
-                data: {
-                  authToken: idToken,
-                  noteId: router.query.noteid,
-                  body: body,
-                },
-              });
-            });
-          }}
-        >
-          Update
-        </button>
       </div>
     </>
   );
