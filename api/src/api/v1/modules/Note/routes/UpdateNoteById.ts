@@ -12,7 +12,7 @@ export const UpdateNoteById = () => {
 
     const note = await prisma.note.update({
       where: {
-        id: noteId,
+        id: noteId
       },
 
       data: {
