@@ -15,8 +15,10 @@ const Home: NextPage = () => {
   }, [user]);
   return (
     <>
-      <Sidebar />
-      <div className="ml-20">{user?.email}</div>
+      <div className="flex">
+        <Sidebar />
+        <div className="">{user?.email}</div>
+      </div>
     </>
   );
 };

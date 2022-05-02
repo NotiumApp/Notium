@@ -16,6 +16,7 @@ module.exports = {
           "Arial",
           "sans-serif",
         ],
+        monospace: ["Fira Code", "monospace"],
       },
       colors: {
         background: "var(--background)",
@@ -26,6 +27,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/typography'),
-],
+  plugins: [require("@tailwindcss/typography")],
 };

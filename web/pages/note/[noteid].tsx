@@ -11,6 +11,8 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import io, { Socket } from "socket.io-client";
 import { getAuth } from "firebase/auth";
+// import "prismjs/components/prism-markdown";
+import "github-markdown-css/github-markdown-light.css";
 
 interface NotePageProps {
   notes: any;
@@ -22,20 +24,6 @@ const NotePage: NextPage<NotePageProps> = () => {
   const [user, loading, error] = useAuthState(auth);
   const [body, setBody] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
-
-  const saveText = () => {
-    user?.getIdToken(true).then(async (idToken) => {
-      const { data } = await api({
-        url: "/note/update/",
-        method: "PUT",
-        data: {
-          authToken: idToken,
-          noteId: router.query.noteid,
-          body: body,
-        },
-      });
-    });
-  };
 
   useEffect(() => {
     (async () => {
@@ -72,11 +60,10 @@ const NotePage: NextPage<NotePageProps> = () => {
   }, [user, router]);
 
   return (
-    <>
-      <Sidebar />
-      <div className="ml-20 min-h-screen">
-        <h1>{notes.title}</h1>
-        <div className="flex space-x-4 h-full">
+    <div className="flex">
+      <Sidebar highlighted={router.query.noteid} />
+      <div className="px-8 h-[90vh] w-full">
+        <div className="flex h-full">
           <textarea
             autoComplete="off"
             autoCorrect="off"
@@ -87,10 +74,12 @@ const NotePage: NextPage<NotePageProps> = () => {
               setBody(event.target.value);
               socket?.emit("update", event.target.value);
             }}
-            className="border border-accent-primary outline-0 min-h-screen resize-none p-4 w-1/2"
+            placeholder="Just start typing..."
+            className="font-monospace outline-none h-full resize-none p-4 w-1/2"
           />
+
           <ReactMarkdown
-            className="h-full p-4 overflow-y-auto w-1/2 prose"
+            className="h-full p-4 overflow-y-auto prose w-1/2"
             remarkPlugins={[remarkGfm]}
             children={body}
             components={{
@@ -114,7 +103,7 @@ const NotePage: NextPage<NotePageProps> = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
