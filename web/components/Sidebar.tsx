@@ -11,7 +11,11 @@ interface Notes {
   userUid: string;
 }
 
-export const Sidebar = ({ highlighted }: { highlighted: string }) => {
+export const Sidebar = ({
+  highlighted,
+}: {
+  highlighted?: string | undefined;
+}) => {
   const [user, error, loading] = useAuthState(auth);
   const [notes, setNotes] = useState<Notes[]>([]);
 
