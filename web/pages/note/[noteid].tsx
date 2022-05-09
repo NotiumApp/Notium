@@ -10,15 +10,16 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import io, { Socket } from "socket.io-client";
-import { getAuth } from "firebase/auth";
 
-import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs/components/prism-core";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-javascript";
-import "prismjs/components/prism-markup-templating";
-import "prismjs/components/prism-markup";
-import "prismjs/components/prism-markdown";
+import CodeMirror from "react-codemirror";
+
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/neo.css";
+
+if (typeof navigator !== "undefined") {
+  require("codemirror/mode/javascript/javascript");
+  require("codemirror/mode/markdown/markdown");
+}
 
 interface NotePageProps {
   notes: any;
@@ -57,8 +58,6 @@ const NotePage: NextPage<NotePageProps> = () => {
           },
         });
 
-        console.log(data, router.query.noteid);
-
         setNotesMetaData(data.note);
         setBody(data.note.body);
       });
@@ -70,31 +69,17 @@ const NotePage: NextPage<NotePageProps> = () => {
       <Sidebar highlighted={router.query.noteid?.toString()} />
       <div className="px-8 h-[90vh] w-full">
         <div className="flex h-full">
-          {/* <textarea
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-            value={body}
-            onChange={(event) => {
-              setBody(event.target.value);
-              socket?.emit("update", event.target.value);
+          <CodeMirror
+            value={body || "Start typing here with Markdown!"}
+            options={{
+              mode: "markdown",
+              theme: "neo",
+              lineNumbers: true,
             }}
-            placeholder="Just start typing..."
-            className="font-monospace outline-none h-full resize-none p-4 w-1/2"
-          /> */}
-          <Editor
-            value={body}
-            onValueChange={(code) => {
-              setBody(code);
-              socket?.emit("update", code);
-            }}
-            highlight={(code) => code}
-            padding={10}
-            placeholder="Just start typing in Markdown..."
-            style={{
-              fontFamily: '"Fira code", "Fira Mono", monospace',
-              fontSize: 14,
+            onChange={(value) => {
+              console.log(value);
+              setBody(value);
+              socket?.emit("update", value);
             }}
             className="h-full resize-none p-4 w-1/2"
           />
