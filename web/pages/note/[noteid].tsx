@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { api } from "../../util/api";
 import { auth } from "../../util/initFirebase";
-import { Sidebar } from "../../components/Sidebar";
+import { setState, useStore, Sidebar } from "../../components/Sidebar";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
@@ -27,10 +27,12 @@ interface NotePageProps {
 
 const NotePage: NextPage<NotePageProps> = () => {
   const [notes, setNotesMetaData] = useState<any>({});
+  const [notesTitle, setNotesTitle] = useState<any>("");
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
   const [body, setBody] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
+  const notesNiue = useStore(null);
 
   useEffect(() => {
     (async () => {
@@ -59,6 +61,7 @@ const NotePage: NextPage<NotePageProps> = () => {
         });
 
         setNotesMetaData(data.note);
+        setNotesTitle(data.note.title);
         setBody(data.note.body);
       });
     })();
@@ -68,9 +71,41 @@ const NotePage: NextPage<NotePageProps> = () => {
     <div className="flex">
       <Sidebar highlighted={router.query.noteid?.toString()} />
       <div className="px-8 h-[90vh] w-full">
+        <div className="py-4">
+          <input
+            value={notesTitle}
+            className="outline-none text-3xl font-semibold hover:bg-slate-100 px-4 rounded-lg py-2 transition duration-150 ease-in-out"
+            autoCorrect="none"
+            autoCapitalize="none"
+            autoComplete="none"
+            onChange={(e) => {
+              socket?.emit(
+                "updateTitle",
+                e.target.value.length > 0 ? e.target.value : "New Note"
+              );
+              setNotesTitle(
+                e.target.value.length > 0 ? e.target.value : "New Note"
+              );
+
+              let dummy = notesNiue;
+
+              for (const note in dummy) {
+                if (dummy[note].id === notes.id) {
+                  dummy[note].title =
+                    e.target.value.length > 0 ? e.target.value : "New Note";
+                }
+              }
+
+              setState();
+            }}
+          />
+        </div>
         <div className="flex h-full">
           <CodeMirror
-            value={body || "Start typing here with Markdown!"}
+            value={
+              body ||
+              "Start typing here with Markdown! Click the title of the note to edit it."
+            }
             options={{
               mode: "markdown",
               theme: "neo",
@@ -87,7 +122,10 @@ const NotePage: NextPage<NotePageProps> = () => {
           <ReactMarkdown
             className="h-full p-4 overflow-y-auto prose w-1/2"
             remarkPlugins={[remarkGfm]}
-            children={body}
+            children={
+              body ||
+              "Start typing here with Markdown! Click the title of the note to edit it."
+            }
             components={{
               code({ node, inline, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || "");

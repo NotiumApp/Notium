@@ -16,6 +16,7 @@
     "codemirror": "^5.65.3",
     "firebase": "^9.6.7",
     "next": "12.1.0",
+    "niue": "^0.1.2",
     "prismjs": "^1.28.0",
     "react": "17.0.2",
     "react-codemirror": "^1.0.0",

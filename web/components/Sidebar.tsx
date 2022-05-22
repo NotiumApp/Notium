@@ -4,6 +4,7 @@ import { api } from "../util/api";
 import { auth } from "../util/initFirebase";
 import { HiPlus } from "react-icons/hi";
 import { CreateNoteModal } from "./CreateNoteModal";
+import { createState } from "niue";
 
 interface Notes {
   id: string;
@@ -11,6 +12,8 @@ interface Notes {
   body: string;
   userUid: string;
 }
+
+export const [useStore, setState] = createState([]);
 
 export const Sidebar = ({
   highlighted,
@@ -21,6 +24,8 @@ export const Sidebar = ({
   const [notes, setNotes] = useState<Notes[]>([]);
 
   const [open, setOpen] = useState(false);
+
+  const notesNiue = useStore(null);
 
   const toggleModal = () => {
     setOpen(!open);
@@ -36,8 +41,9 @@ export const Sidebar = ({
       });
 
       console.log(data.notes);
+      setState(data.notes);
 
-      setNotes(data.notes);
+      // setNotes(data.notes);
     });
   }, [user]);
 
@@ -58,7 +64,7 @@ export const Sidebar = ({
               </div>
             </button>
           </div>
-          {notes.map((note, i) => {
+          {notesNiue.map((note: Notes, i) => {
             return (
               <a href={`/note/${note.id}`} key={i}>
                 <div

@@ -155,14 +155,32 @@ export class Server {
 
       socket.on("update", async (body: string) => {
         socket.broadcast.to(noteId).emit("update", body);
-        console.log("yo yo yo");
 
-        const res = await prisma.note.update({
+        const res = await prisma.note.updateMany({
           where: {
             id: noteId.toString(),
+            userUid: user.uid,
           },
           data: {
             body: body,
+          },
+        });
+
+        if (!res) {
+          socket.disconnect();
+        }
+      });
+
+      socket.on("updateTitle", async (title: string) => {
+        socket.broadcast.to(noteId).emit("updateTitle", title);
+
+        const res = await prisma.note.updateMany({
+          where: {
+            id: noteId.toString(),
+            userUid: user.uid,
+          },
+          data: {
+            title: title,
           },
         });
 
