@@ -5,6 +5,7 @@ import { auth } from "../util/initFirebase";
 import { HiPlus } from "react-icons/hi";
 import { CreateNoteModal } from "./CreateNoteModal";
 import { createState } from "niue";
+import Link from "next/link";
 
 interface Notes {
   id: string;
@@ -43,13 +44,12 @@ export const Sidebar = ({
       console.log(data.notes);
       setState(data.notes);
 
-      // setNotes(data.notes);
+      setNotes(data.notes);
     });
   }, [user]);
 
   return (
     <>
-      <CreateNoteModal parentOpen={open} toggleModal={toggleModal} />
       <div className="bg-slate-100 w-72 sticky left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
         <div className="px-2">
           <div className="flex justify-between w-full mb-2">
@@ -64,17 +64,19 @@ export const Sidebar = ({
               </div>
             </button>
           </div>
-          {notesNiue.map((note: Notes, i) => {
+          {notes.map((note: Notes, i) => {
             return (
-              <a href={`/note/${note.id}`} key={i}>
-                <div
-                  className={`rounded-md hover:bg-slate-200 transition text-left px-4 py-2 ${
-                    note.id === highlighted ? "bg-slate-200" : ""
-                  }`}
-                >
-                  <p>{note.title}</p>
-                </div>
-              </a>
+              <div className="cursor-pointer">
+                <Link shallow href={`/note/${note.id}`} key={i}>
+                  <div
+                    className={`rounded-md hover:bg-slate-200 transition text-left px-4 py-2 ${
+                      note.id === highlighted ? "bg-slate-200" : ""
+                    }`}
+                  >
+                    <p>{note.title}</p>
+                  </div>
+                </Link>
+              </div>
             );
           })}
         </div>
