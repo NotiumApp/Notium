@@ -3,9 +3,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { api } from "../util/api";
 import { auth } from "../util/initFirebase";
 import { HiPlus } from "react-icons/hi";
-import { CreateNoteModal } from "./CreateNoteModal";
 import { createState } from "niue";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface Notes {
   id: string;
@@ -25,12 +25,9 @@ export const Sidebar = ({
   const [notes, setNotes] = useState<Notes[]>([]);
 
   const [open, setOpen] = useState(false);
-
   const notesNiue = useStore(null);
+  const router = useRouter();
 
-  const toggleModal = () => {
-    setOpen(!open);
-  };
   useEffect(() => {
     user?.getIdToken(true).then(async (idToken) => {
       const { data } = await api({
@@ -60,6 +57,35 @@ export const Sidebar = ({
             <button
               onClick={() => {
                 // setOpen(!open);
+                user?.getIdToken(true).then(async (idToken) => {
+                  try {
+                    const createdNote = await api({
+                      url: "/note/create/",
+                      method: "POST",
+                      headers: {
+                        Authorization: idToken,
+                      },
+                    });
+
+                    const { data } = await api({
+                      url: "/note/read/all",
+                      method: "POST",
+                      data: {
+                        authToken: idToken,
+                      },
+                      headers: {
+                        Authorization: idToken,
+                      },
+                    });
+
+                    setState(data.notes);
+
+                    setNotes(data.notes);
+                    router.push(`/note/${createdNote.data.note.id}`);
+                  } catch (err) {
+                    console.log("err", err);
+                  }
+                });
               }}
             >
               <div className="p-1 rounded-md hover:bg-slate-300 transition cursor-pointer">

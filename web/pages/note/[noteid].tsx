@@ -67,10 +67,13 @@ const NotePage: NextPage<NotePageProps> = () => {
           },
         });
 
+        console.log(data.note);
+
         setNotesMetaData(data.note);
         setNotesTitle(data.note.title);
         setBody(data.note.body);
         setInitialBody(data.note.body);
+        console.log("IM HERE INNIT", initialBody);
       });
     })();
   }, [user, router]);
