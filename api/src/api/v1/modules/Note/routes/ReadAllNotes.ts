@@ -2,10 +2,10 @@ import { Router } from "express";
 import { prisma } from "../../../db/index";
 
 //Reads a specific note
-export const ReadNoteById = () => {
+export const ReadAllNotes = () => {
   const router = Router();
 
-  router.get("/", async (req, res) => {
+  router.post("/", async (req, res) => {
     const notes = await prisma.note.findMany({});
 
     if (!notes) {

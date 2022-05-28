@@ -35,13 +35,16 @@ export const Sidebar = ({
     user?.getIdToken(true).then(async (idToken) => {
       const { data } = await api({
         url: "/note/read/all",
-        method: "GET",
+        method: "POST",
         data: {
           authToken: idToken,
         },
+        headers: {
+          Authorization: idToken,
+        },
       });
 
-      console.log(data.notes);
+      console.log(data);
       setState(data.notes);
 
       setNotes(data.notes);
@@ -56,7 +59,7 @@ export const Sidebar = ({
             <p className="text-base font-bold">Your notes</p>
             <button
               onClick={() => {
-                setOpen(!open);
+                // setOpen(!open);
               }}
             >
               <div className="p-1 rounded-md hover:bg-slate-300 transition cursor-pointer">

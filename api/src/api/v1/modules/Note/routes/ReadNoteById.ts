@@ -5,10 +5,10 @@ import { prisma } from "../../../db/index";
 export const ReadNoteById = () => {
   const router = Router();
 
-  router.get("/", async (req, res) => {
+  router.post("/", async (req, res) => {
     const { noteId } = req.body;
 
-    console.log(noteId)
+    console.log(noteId);
 
     const note = await prisma.note.findFirst({
       where: {

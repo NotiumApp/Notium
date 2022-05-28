@@ -11,7 +11,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import io, { Socket } from "socket.io-client";
 
-import CodeMirror from "react-codemirror";
+import { UnControlled as CodeMirror } from "react-codemirror2";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/neo.css";
@@ -30,7 +30,12 @@ const NotePage: NextPage<NotePageProps> = () => {
   const [notesTitle, setNotesTitle] = useState<any>("");
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState(
+    "Start typing here with Markdown! Click the title of the note to edit it."
+  );
+
+  // react codemirror 2 does some weird stuff hence why we use this (sidenote: this hurts to use)
+  const [initialBody, setInitialBody] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
   const notesNiue = useStore(null);
 
@@ -55,14 +60,17 @@ const NotePage: NextPage<NotePageProps> = () => {
           url: "/note/read/",
           method: "POST",
           data: {
-            authToken: idToken,
             noteId: router.query.noteid,
+          },
+          headers: {
+            Authorization: idToken,
           },
         });
 
         setNotesMetaData(data.note);
         setNotesTitle(data.note.title);
         setBody(data.note.body);
+        setInitialBody(data.note.body);
       });
     })();
   }, [user, router]);
@@ -95,23 +103,18 @@ const NotePage: NextPage<NotePageProps> = () => {
                     e.target.value.length > 0 ? e.target.value : "New Note";
                 }
               }
-
-              setState();
             }}
           />
         </div>
         <div className="flex h-full">
           <CodeMirror
-            value={
-              body ||
-              "Start typing here with Markdown! Click the title of the note to edit it."
-            }
+            value={initialBody}
             options={{
               mode: "markdown",
               theme: "neo",
               lineNumbers: true,
             }}
-            onChange={(value) => {
+            onChange={(editor, data, value) => {
               console.log(value);
               setBody(value);
               socket?.emit("update", value);
@@ -123,8 +126,9 @@ const NotePage: NextPage<NotePageProps> = () => {
             className="h-full p-4 overflow-y-auto prose w-1/2"
             remarkPlugins={[remarkGfm]}
             children={
-              body ||
-              "Start typing here with Markdown! Click the title of the note to edit it."
+              body
+              //  ||
+              // "Start typing here with Markdown! Click the title of the note to edit it."
             }
             components={{
               code({ node, inline, className, children, ...props }) {

@@ -7,6 +7,7 @@ import cors from "cors";
 import http from "http";
 import { Server as SocketServer } from "socket.io";
 import FirebaseAdmin from "firebase-admin";
+import bodyParser from "body-parser";
 
 //Server configuration and setup
 export class Server {
@@ -48,7 +49,12 @@ export class Server {
 
   private registerMiddlewares() {
     //use json
-    this.app.use(express.json());
+    this.app.use(bodyParser.json());
+    this.app.use(
+      bodyParser.urlencoded({
+        extended: false,
+      })
+    );
 
     this.app.use(cors({ origin: "*" }));
 
@@ -69,60 +75,60 @@ export class Server {
       });
     });
 
-    //TEMPORARY, CHANGE LATER
-    this.app.post("/v1/note/read", isAuthenticated, async (req, res) => {
-      const { noteId } = req.body;
+    // //TEMPORARY, CHANGE LATER
+    // this.app.post("/v1/note/read", isAuthenticated, async (req, res) => {
+    //   const { noteId } = req.body;
 
-      console.log(noteId);
+    //   console.log(noteId);
 
-      const note = await prisma.note.findFirst({
-        where: {
-          id: noteId,
-        },
-      });
+    //   const note = await prisma.note.findFirst({
+    //     where: {
+    //       id: noteId,
+    //     },
+    //   });
 
-      // console.log(res.locals.user);
-      // console.log(note);
+    //   // console.log(res.locals.user);
+    //   // console.log(note);
 
-      if (!note) {
-        res.json({ success: false, message: "That note doesn't exist!" });
-      }
+    //   if (!note) {
+    //     res.json({ success: false, message: "That note doesn't exist!" });
+    //   }
 
-      res.json({ success: true, note: note });
-    });
+    //   res.json({ success: true, note: note });
+    // });
 
-    this.app.put("/v1/note/update", async (req, res) => {
-      const { noteId, body } = req.body;
+    // this.app.put("/v1/note/update", async (req, res) => {
+    //   const { noteId, body } = req.body;
 
-      const note = await prisma.note.update({
-        where: {
-          id: noteId,
-        },
+    //   const note = await prisma.note.update({
+    //     where: {
+    //       id: noteId,
+    //     },
 
-        data: {
-          body: body,
-        },
-      });
+    //     data: {
+    //       body: body,
+    //     },
+    //   });
 
-      console.log(note);
+    //   console.log(note);
 
-      if (!note) {
-        res.json({ success: false, message: "That note doesn't exist!" });
-      }
+    //   if (!note) {
+    //     res.json({ success: false, message: "That note doesn't exist!" });
+    //   }
 
-      res.json({ success: true, note: note });
-    });
+    //   res.json({ success: true, note: note });
+    // });
 
-    //TEMPORARY, CHANGE LATER
-    this.app.get("/v1/note/read/all", async (req, res) => {
-      const notes = await prisma.note.findMany({});
+    // //TEMPORARY, CHANGE LATER
+    // this.app.get("/v1/note/read/all", async (req, res) => {
+    //   const notes = await prisma.note.findMany({});
 
-      if (!notes) {
-        res.json({ success: false, message: "There are currently no notes" });
-      }
+    //   if (!notes) {
+    //     res.json({ success: false, message: "There are currently no notes" });
+    //   }
 
-      res.json({ success: true, notes: notes });
-    });
+    //   res.json({ success: true, notes: notes });
+    // });
 
     this.app.use("/v1", apiV1);
   }

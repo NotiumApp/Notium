@@ -1,4 +1,5 @@
 import { auth as AuthRoutes } from "./modules/Auth";
+import { note as NoteRoutes } from "./modules/Note";
 import { Router } from "express";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
 
@@ -10,4 +11,4 @@ apiV1.get("/", (req, res) => {
 });
 
 apiV1.use("/auth", AuthRoutes);
-apiV1.use("/note", AuthRoutes);
+apiV1.use("/note", isAuthenticated, NoteRoutes);
