@@ -109,7 +109,7 @@ const NotePage: NextPage<NotePageProps> = () => {
             }}
           />
         </div>
-        <div className="flex h-full">
+        <div className="grid grid-cols-2">
           <CodeMirror
             value={initialBody}
             options={{

@@ -9,7 +9,7 @@ export const CreateNote = () => {
     const note = await prisma.note.create({
       data: {
         title: "Untitled Note",
-        body: "",
+        body: "Start typing here with [Markdown](https://www.markdownguide.org/)!",
         userUid: res.locals.user.uid,
       },
     });

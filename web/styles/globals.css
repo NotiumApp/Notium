@@ -66,3 +66,17 @@
     color: black;
   }
 }
+
+.cm-header-1{
+  font-size: 1.7em;
+}
+.cm-header-2{
+  font-size: 1.5em;
+}
+
+.cm-header-3{
+  font-size: 1.3em;
+}
+.cm-header-4{
+  font-size: 1.1em;
+}
