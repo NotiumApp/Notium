@@ -96,21 +96,53 @@ export const Sidebar = ({
           </div>
           {notes.map((note: Notes, i) => {
             return (
-              <div className="cursor-pointer">
+              <div
+                className={`cursor-pointer flex justify-between transition rounded-md  px-4 py-2 items-center hover:bg-slate-200 ${
+                  note.id === highlighted ? "bg-slate-200" : ""
+                }`}
+              >
                 <Link shallow href={`/note/${note.id}`} key={i}>
-                  <div
-                    className={`flex items-center justify-between rounded-md hover:bg-slate-200 transition text-left px-4 py-2 ${
-                      note.id === highlighted ? "bg-slate-200" : ""
-                    }`}
-                  >
+                  <div className={`w-full`}>
                     <p>{note.title}</p>
-                    <button>
-                      <p className="hover:text-gray-500 transition duration-150 ease-in-out p-1 rounded-md">
-                        <HiX size={17} />
-                      </p>
-                    </button>
                   </div>
                 </Link>
+                <button
+                  onClick={() => {
+                    console.log("hi hihiihihi", note.id, note.title);
+                    user?.getIdToken(true).then(async (idToken) => {
+                      try {
+                        const { data } = await api({
+                          url: "/note/delete",
+                          method: "POST",
+                          headers: {
+                            Authorization: idToken,
+                          },
+                          data: {
+                            id: note.id,
+                          },
+                        });
+
+                        console.log(data);
+
+                        let dummy: any = notes;
+
+                        dummy = dummy.filter(
+                          (newNote: any) => newNote.id !== note.id
+                        );
+
+                        setNotes(dummy);
+                        setState(dummy);
+                        router.push(
+                          dummy.length > 0 ? `/note/${dummy[0].id}` : "/"
+                        );
+                      } catch (err) {}
+                    });
+                  }}
+                >
+                  <p className="hover:text-gray-500 transition duration-150 ease-in-out p-1 rounded-md">
+                    <HiX size={17} />
+                  </p>
+                </button>
               </div>
             );
           })}
