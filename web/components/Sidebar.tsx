@@ -6,6 +6,7 @@ import { HiPlus } from "react-icons/hi";
 import { createState } from "niue";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { HiX } from "react-icons/hi";
 
 interface Notes {
   id: string;
@@ -50,7 +51,7 @@ export const Sidebar = ({
 
   return (
     <>
-      <div className="bg-slate-100 w-72 sticky left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
+      <div className="bg-slate-100 w-72 left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
         <div className="px-2 overflow-auto">
           <div className="flex justify-between w-full mb-2">
             <p className="text-base font-bold">Your notes</p>
@@ -98,11 +99,16 @@ export const Sidebar = ({
               <div className="cursor-pointer">
                 <Link shallow href={`/note/${note.id}`} key={i}>
                   <div
-                    className={`rounded-md hover:bg-slate-200 transition text-left px-4 py-2 ${
+                    className={`flex items-center justify-between rounded-md hover:bg-slate-200 transition text-left px-4 py-2 ${
                       note.id === highlighted ? "bg-slate-200" : ""
                     }`}
                   >
                     <p>{note.title}</p>
+                    <button>
+                      <p className="hover:text-gray-500 transition duration-150 ease-in-out p-1 rounded-md">
+                        <HiX size={17} />
+                      </p>
+                    </button>
                   </div>
                 </Link>
               </div>

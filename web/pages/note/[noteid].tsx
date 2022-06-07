@@ -109,7 +109,7 @@ const NotePage: NextPage<NotePageProps> = () => {
             }}
           />
         </div>
-        <div className="grid grid-cols-2">
+        <div className="w-full flex">
           <CodeMirror
             value={initialBody}
             options={{
@@ -122,7 +122,7 @@ const NotePage: NextPage<NotePageProps> = () => {
               setBody(value);
               socket?.emit("update", value);
             }}
-            className="h-full resize-none p-4 w-1/2"
+            className="h-full resize-none p-4 w-1/2  "
           />
 
           <ReactMarkdown
@@ -137,13 +137,15 @@ const NotePage: NextPage<NotePageProps> = () => {
               code({ node, inline, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
-                  <SyntaxHighlighter
-                    children={String(children).replace(/\n$/, "")}
-                    style={dracula}
-                    language={match[1]}
-                    PreTag="pre"
-                    {...props}
-                  />
+                  <>
+                    <SyntaxHighlighter
+                      children={String(children).replace(/\n$/, "")}
+                      style={dracula}
+                      language={match[1]}
+                      PreTag="pre"
+                      {...props}
+                    />
+                  </>
                 ) : (
                   <code className={className} {...props}>
                     {children}
