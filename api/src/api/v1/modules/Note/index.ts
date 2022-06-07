@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { isAuthenticated } from "../../middlewares/isAuthenticated";
 import { CreateNote } from "./routes/CreateNote";
+import { DeleteNote } from "./routes/DeleteNote";
 import { ReadAllNotes } from "./routes/ReadAllNotes";
 import { ReadNoteById } from "./routes/ReadNoteById";
 import { UpdateNoteById } from "./routes/UpdateNoteById";
@@ -12,3 +13,4 @@ note.use("/create", CreateNote());
 note.use("/read", ReadNoteById());
 note.use("/read/all", ReadAllNotes());
 note.use("/update", UpdateNoteById());
+note.use("/delete", DeleteNote());
