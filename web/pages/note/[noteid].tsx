@@ -10,6 +10,7 @@ import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import io, { Socket } from "socket.io-client";
+import piston from "piston-client";
 
 import { UnControlled as CodeMirror } from "react-codemirror2";
 
@@ -145,6 +146,31 @@ const NotePage: NextPage<NotePageProps> = () => {
                       PreTag="pre"
                       {...props}
                     />
+                    <button
+                      onClick={async () => {
+                        const client = piston({});
+
+                        const runtimes = await client.runtimes();
+                        // [{ language: 'python', version: '3.9.4', aliases: ['py'] }, ...]
+                        console.log(runtimes, match);
+
+                        const result = await client.execute(
+                          match[1],
+                          String(children).replace(/\n$/, ""),
+                          { version: "*" }
+                        );
+                        console.log(result);
+                        // { language: 'python', version: '3.9.4', run: {
+                        //     stdout: 'Hello World!\n',
+                        //     stderr: '',
+                        //     code: 0,
+                        //     signal: null,
+                        //     output: 'Hello World!\n'
+                        // }}
+                      }}
+                    >
+                      Run
+                    </button>
                   </>
                 ) : (
                   <code className={className} {...props}>

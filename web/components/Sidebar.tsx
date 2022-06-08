@@ -7,6 +7,7 @@ import { createState } from "niue";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { HiX } from "react-icons/hi";
+import toast from "react-hot-toast";
 
 interface Notes {
   id: string;
@@ -132,10 +133,13 @@ export const Sidebar = ({
 
                         setNotes(dummy);
                         setState(dummy);
+                        toast.success("Note deleted sucessfully");
                         router.push(
                           dummy.length > 0 ? `/note/${dummy[0].id}` : "/"
                         );
-                      } catch (err) {}
+                      } catch (err) {
+                        toast.error("Hmm, something went wrong");
+                      }
                     });
                   }}
                 >
