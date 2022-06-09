@@ -16,6 +16,8 @@ import { UnControlled as CodeMirror } from "react-codemirror2";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/neo.css";
+import { stderr } from "process";
+import { HiPlay } from "react-icons/hi";
 
 if (typeof navigator !== "undefined") {
   require("codemirror/mode/javascript/javascript");
@@ -136,9 +138,15 @@ const NotePage: NextPage<NotePageProps> = () => {
             }
             components={{
               code({ node, inline, className, children, ...props }) {
+                interface outputInterface {
+                  type: "error" | "success";
+                  stdout: string;
+                  stderr?: string;
+                }
+                const [output, setOutput] = useState<outputInterface>();
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
-                  <>
+                  <div>
                     <SyntaxHighlighter
                       children={String(children).replace(/\n$/, "")}
                       style={dracula}
@@ -160,6 +168,18 @@ const NotePage: NextPage<NotePageProps> = () => {
                           { version: "*" }
                         );
                         console.log(result);
+                        if (result.run.stderr.length) {
+                          setOutput({
+                            type: "error",
+                            stdout: result.run.stdout,
+                            stderr: result.run.stderr,
+                          });
+                        } else {
+                          setOutput({
+                            type: "success",
+                            stdout: result.run.stdout,
+                          });
+                        }
                         // { language: 'python', version: '3.9.4', run: {
                         //     stdout: 'Hello World!\n',
                         //     stderr: '',
@@ -169,9 +189,17 @@ const NotePage: NextPage<NotePageProps> = () => {
                         // }}
                       }}
                     >
-                      Run
+                      <HiPlay size={35} />
                     </button>
-                  </>
+                    {output && (
+                      <div className="w-auto overflow-auto">
+                        <p className="text-white">{output.stdout}</p>
+                        <p className="text-red-500">
+                          {output.type === "error" ? output.stderr : ""}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <code className={className} {...props}>
                     {children}
