@@ -168,7 +168,15 @@ const NotePage: NextPage<NotePageProps> = () => {
                           { version: "*" }
                         );
                         console.log(result);
-                        if (result.run.stderr.length) {
+
+                        // if (result.compile.stderr) {
+                        if (result.compile && result.compile.stderr) {
+                          setOutput({
+                            type: "error",
+                            stdout: result.compile.stdout,
+                            stderr: result.compile.stderr,
+                          });
+                        } else if (result.run.stderr) {
                           setOutput({
                             type: "error",
                             stdout: result.run.stdout,
@@ -180,6 +188,17 @@ const NotePage: NextPage<NotePageProps> = () => {
                             stdout: result.run.stdout,
                           });
                         }
+                        // } else {
+                        // if (result.run.stderr) {
+                        //   setOutput({
+                        //     type: "error",
+                        //     stdout: result.run.stdout,
+                        //     stderr: result.run.stderr,
+                        //   });
+                        // } else {
+
+                        // }
+                        // }
                         // { language: 'python', version: '3.9.4', run: {
                         //     stdout: 'Hello World!\n',
                         //     stderr: '',
