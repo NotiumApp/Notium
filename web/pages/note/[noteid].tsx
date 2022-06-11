@@ -18,6 +18,7 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/neo.css";
 import { stderr } from "process";
 import { HiPlay } from "react-icons/hi";
+import Select from "react-select/";
 
 if (typeof navigator !== "undefined") {
   require("codemirror/mode/javascript/javascript");
@@ -143,7 +144,32 @@ const NotePage: NextPage<NotePageProps> = () => {
                   stdout: string;
                   stderr?: string;
                 }
+                interface Runtime {
+                  language: string;
+                  version: string;
+                  aliases: string[];
+                  runtime?: string;
+                }
+
+                const client = piston({});
                 const [output, setOutput] = useState<outputInterface>();
+                const [runtimes, setRunTimes] = useState<any[]>([]);
+
+                useEffect(() => {
+                  (async () => {
+                    const clientRuntimes: Runtime[] = await client.runtimes();
+
+                    setRunTimes(
+                      clientRuntimes.map((language) => {
+                        let label = language.runtime
+                          ? `${language.language} on ${language.runtime}`
+                          : language.language;
+                        return { label: label, value: label };
+                      })
+                    );
+                  })();
+                }, []);
+
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
                   <div>
@@ -156,10 +182,8 @@ const NotePage: NextPage<NotePageProps> = () => {
                     />
                     <button
                       onClick={async () => {
-                        const client = piston({});
-
-                        const runtimes = await client.runtimes();
                         // [{ language: 'python', version: '3.9.4', aliases: ['py'] }, ...]
+
                         console.log(runtimes, match);
 
                         const result = await client.execute(
@@ -188,28 +212,11 @@ const NotePage: NextPage<NotePageProps> = () => {
                             stdout: result.run.stdout,
                           });
                         }
-                        // } else {
-                        // if (result.run.stderr) {
-                        //   setOutput({
-                        //     type: "error",
-                        //     stdout: result.run.stdout,
-                        //     stderr: result.run.stderr,
-                        //   });
-                        // } else {
-
-                        // }
-                        // }
-                        // { language: 'python', version: '3.9.4', run: {
-                        //     stdout: 'Hello World!\n',
-                        //     stderr: '',
-                        //     code: 0,
-                        //     signal: null,
-                        //     output: 'Hello World!\n'
-                        // }}
                       }}
                     >
                       <HiPlay size={35} />
                     </button>
+                    <Select options={runtimes} />
                     {output && (
                       <div className="w-auto overflow-auto">
                         <p className="text-white">{output.stdout}</p>
