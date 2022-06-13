@@ -180,43 +180,55 @@ const NotePage: NextPage<NotePageProps> = () => {
                       PreTag="pre"
                       {...props}
                     />
-                    <button
-                      onClick={async () => {
-                        // [{ language: 'python', version: '3.9.4', aliases: ['py'] }, ...]
 
-                        console.log(runtimes, match);
+                    <div className="items-center flex space-x-4">
+                      <button
+                        onClick={async () => {
+                          // [{ language: 'python', version: '3.9.4', aliases: ['py'] }, ...]
 
-                        const result = await client.execute(
-                          match[1],
-                          String(children).replace(/\n$/, ""),
-                          { version: "*" }
-                        );
-                        console.log(result);
+                          console.log(runtimes, match);
 
-                        // if (result.compile.stderr) {
-                        if (result.compile && result.compile.stderr) {
-                          setOutput({
-                            type: "error",
-                            stdout: result.compile.stdout,
-                            stderr: result.compile.stderr,
-                          });
-                        } else if (result.run.stderr) {
-                          setOutput({
-                            type: "error",
-                            stdout: result.run.stdout,
-                            stderr: result.run.stderr,
-                          });
-                        } else {
-                          setOutput({
-                            type: "success",
-                            stdout: result.run.stdout,
-                          });
-                        }
-                      }}
-                    >
-                      <HiPlay size={35} />
-                    </button>
-                    <Select options={runtimes} />
+                          const result = await client.execute(
+                            match[1],
+                            String(children).replace(/\n$/, ""),
+                            { version: "*" }
+                          );
+                          console.log(result);
+
+                          // if (result.compile.stderr) {
+                          if (result.compile && result.compile.stderr) {
+                            setOutput({
+                              type: "error",
+                              stdout: result.compile.stdout,
+                              stderr: result.compile.stderr,
+                            });
+                          } else if (result.run.stderr) {
+                            setOutput({
+                              type: "error",
+                              stdout: result.run.stdout,
+                              stderr: result.run.stderr,
+                            });
+                          } else {
+                            setOutput({
+                              type: "success",
+                              stdout: result.run.stdout,
+                            });
+                          }
+                        }}
+                      >
+                        <HiPlay size={35} />
+                      </button>
+                      <select className="rounded-md bg-white text-black font-sans p-1 font-medium text-xs">
+                        <option value="auto-detect">Auto Detect</option>
+                        {runtimes.map((runtime) => {
+                          return (
+                            <option value={runtime.value}>
+                              {runtime.label}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
                     {output && (
                       <div className="w-auto overflow-auto">
                         <p className="text-white">{output.stdout}</p>
