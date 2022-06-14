@@ -1,17 +1,30 @@
 import { NextPage } from "next/types";
+import { useState } from "react";
 import { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import {
+  useAuthState,
+  useUpdateEmail,
+  useUpdateProfile,
+} from "react-firebase-hooks/auth";
 import { HiOutlineAtSymbol, HiOutlinePencil } from "react-icons/hi";
 import { auth } from "../util/initFirebase";
 
 const Settings: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
+  const [updateProfile, updating, profileError] = useUpdateProfile(auth);
+  const [updateEmail, emailUpdating, emailError] = useUpdateEmail(auth);
+
+  const [email, setEmail] = useState<string>();
+  const [name, setName] = useState<string>();
   useEffect(() => {
     user
       ? user.getIdToken(true).then(async (idToken) => {
           console.log(idToken);
         })
       : null;
+
+    setName(user?.displayName || "");
+    setEmail(user?.email || "");
   }, [user]);
   return (
     <>
@@ -28,7 +41,7 @@ const Settings: NextPage = () => {
             </p>
           </div>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-8">
             <div className="space-y-6 w-1/2">
               <div>
                 <div className="flex flex-col space-y-2">
@@ -37,9 +50,13 @@ const Settings: NextPage = () => {
                   </label>
                   <input
                     name="name"
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      updateProfile({ displayName: e.target.value });
+                    }}
                     placeholder="John Doe"
-                    value={user?.displayName || ""}
-                    className="rounded-md text-sm outline-none border-2 border-slate-300 text-slate-400 py-1 px-2"
+                    value={name}
+                    className="rounded-md text-sm outline-none border-2 border-slate-300 text-slate-400 py-2 px-4"
                   />
                 </div>
               </div>
@@ -53,9 +70,14 @@ const Settings: NextPage = () => {
                   </div>
                   <input
                     name="email"
+                    type={"email"}
                     placeholder="john@example.com"
-                    value={user?.email || ""}
-                    className="rounded-r-md text-sm outline-none border-2 border-slate-300 py-1 px-2 w-full text-slate-400"
+                    onChange={async (e) => {
+                      setEmail(e.target.value);
+                      await updateEmail(e.target.value);
+                    }}
+                    value={email}
+                    className="rounded-r-md text-sm outline-none border-2 border-slate-300 py-2 px-4 w-full text-slate-400"
                   />
                 </div>
               </div>
