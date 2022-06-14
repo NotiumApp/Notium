@@ -27,7 +27,7 @@ const Navbar = () => {
             notium
           </a>
         </div>
-        <nav className="hidden md:block space-x-6">{navbarElements}</nav>
+        {/* <nav className="hidden md:block space-x-6">{navbarElements}</nav>
         <button
           type="button"
           aria-label="Toggle mobile menu"
@@ -35,10 +35,10 @@ const Navbar = () => {
           className="rounded md:hidden focus:outline-none focus:ring focus:ring-gray-500 focus:ring-opacity-50"
         >
           {navbarOpen ? <FaTimes size={25} /> : <FiMenu size={25} />}
-        </button>
+        </button> */}
       </div>
 
-      {navbarOpen && <NavbarMobileMenu>{navbarElements}</NavbarMobileMenu>}
+      {/* {navbarOpen && <NavbarMobileMenu>{navbarElements}</NavbarMobileMenu>} */}
     </div>
   );
 };

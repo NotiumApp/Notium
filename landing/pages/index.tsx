@@ -4,10 +4,10 @@ import HeroSection from "../components/Section/HeroSection";
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className="xl:overflow-hidden h-screen">
       <Navbar />
 
-      <div className="sm:p-10">
+      <div className="sm:p-10 h-full">
         <HeroSection />
       </div>
     </div>
