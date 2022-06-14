@@ -154,17 +154,22 @@ const NotePage: NextPage<NotePageProps> = () => {
                 const client = piston({});
                 const [output, setOutput] = useState<outputInterface>();
                 const [runtimes, setRunTimes] = useState<any[]>([]);
+                const [selectedLanguage, setSelectedLanguage] =
+                  useState("auto-detect");
 
                 useEffect(() => {
                   (async () => {
                     const clientRuntimes: Runtime[] = await client.runtimes();
-
+                    console.log(clientRuntimes);
                     setRunTimes(
                       clientRuntimes.map((language) => {
                         let label = language.runtime
                           ? `${language.language} on ${language.runtime}`
                           : language.language;
-                        return { label: label, value: label };
+                        return {
+                          label: label,
+                          value: language.aliases[0] || language.language,
+                        };
                       })
                     );
                   })();
@@ -189,7 +194,9 @@ const NotePage: NextPage<NotePageProps> = () => {
                           console.log(runtimes, match);
 
                           const result = await client.execute(
-                            match[1],
+                            selectedLanguage === "auto-detect"
+                              ? match[1]
+                              : selectedLanguage,
                             String(children).replace(/\n$/, ""),
                             { version: "*" }
                           );
@@ -218,7 +225,12 @@ const NotePage: NextPage<NotePageProps> = () => {
                       >
                         <HiPlay size={35} />
                       </button>
-                      <select className="rounded-md bg-white text-black font-sans p-1 font-medium text-xs">
+                      <select
+                        onChange={(e) => {
+                          setSelectedLanguage(e.target.value);
+                        }}
+                        className="rounded-md bg-white text-black font-sans p-1 font-medium text-xs w-full"
+                      >
                         <option value="auto-detect">Auto Detect</option>
                         {runtimes.map((runtime) => {
                           return (
