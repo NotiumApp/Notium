@@ -151,17 +151,19 @@ export const Sidebar = ({
             );
           })}
         </div>
-        <div className="p-4 bg-slate-200 rounded-t-xl flex items-center space-x-4">
-          <img
-            src={user?.photoURL || ""}
-            alt="user"
-            className="w-12 h-12 rounded-full"
-          />
-          <div>
-            <p className="font-semibold">{user?.displayName}</p>
-            <small className="text-xs text-gray-600">{user?.email}</small>
+        <a href="/settings">
+          <div className="p-4 bg-slate-200 rounded-t-xl flex items-center space-x-4">
+            <img
+              src={user?.photoURL || ""}
+              alt="user"
+              className="w-12 h-12 rounded-full"
+            />
+            <div>
+              <p className="font-semibold">{user?.displayName}</p>
+              <small className="text-xs text-gray-600">{user?.email}</small>
+            </div>
           </div>
-        </div>
+        </a>
       </div>
     </>
   );
