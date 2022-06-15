@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       fontFamily: {
         righteous: ["Righteous"],
-        rubik: ["Rubik"],
+        rubik: ["Inter"],
       },
 
       colors: {
