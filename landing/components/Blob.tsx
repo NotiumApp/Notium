@@ -5,7 +5,7 @@ export const Blob = () => {
       height="1000"
       viewBox="0 0 1000 1000"
       xmlns="http://www.w3.org/2000/svg"
-      className="hidden xl:block blur-3xl absolute top-0 translate -translate-y-60 z-0 "
+      className="hidden lg:block blur-3xl absolute top-0 translate -translate-y-60 z-0 "
     >
       <defs>
         <filter id="grain" x="-50vw" y="-50vh" width="100vw" height="100vh">

@@ -2,8 +2,9 @@ import Head from "next/head";
 import type { AppProps } from "next/app";
 import { appData } from "../util/appData";
 import "../styles/globals.css";
-
-function Tripley({ Component, pageProps }: AppProps) {
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+function Notium({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -18,9 +19,20 @@ function Tripley({ Component, pageProps }: AppProps) {
         <meta property="og:url" content={appData.url} />
         <meta property="og:image" content="/logo/logo.png" />
       </Head>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <Component {...pageProps} />
     </>
   );
 }
 
-export default Tripley;
+export default Notium;
