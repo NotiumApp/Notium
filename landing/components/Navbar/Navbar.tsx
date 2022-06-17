@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import NavbarMobileMenu from "./NavbarMobileMenu";
-import { FiMenu } from "react-icons/fi";
-import { FaTimes } from "react-icons/fa";
 
 //For each navbar element
 const navbarPages = ["Test", "Something", "Login"];
