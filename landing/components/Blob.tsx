@@ -9,7 +9,7 @@ export const Blob = () => {
     >
       <defs>
         <filter id="grain" x="-50vw" y="-50vh" width="100vw" height="100vh">
-          <feFlood flood-color="#ffffff" result="neutral-gray" />
+          <feFlood floodColor="#ffffff" result="neutral-gray" />
 
           <feTurbulence
             in="neutral-gray"
@@ -43,8 +43,8 @@ export const Blob = () => {
           id="linearGradientId"
           gradientTransform="rotate(0 0.5 0.5)"
         >
-          <stop offset="0%" stop-color="#d5ffdb" />
-          <stop offset="100%" stop-color="#c6dbff" />
+          <stop offset="0%" stopColor="#d5ffdb" />
+          <stop offset="100%" stopColor="#c6dbff" />
         </linearGradient>
 
         <clipPath id="shape">
@@ -55,7 +55,7 @@ export const Blob = () => {
         </clipPath>
       </defs>
 
-      <g filter="url(#grain)" clip-path="url(#shape)">
+      <g filter="url(#grain)" clipPath="url(#shape)">
         <path
           fill="url(#linearGradientId)"
           d="M846,622Q836,744,730,813Q624,882,502,876Q380,870,245,826.5Q110,783,55.5,641.5Q1,500,93,385.5Q185,271,286,212.5Q387,154,506.5,133.5Q626,113,721,191.5Q816,270,836,385Q856,500,846,622Z"
