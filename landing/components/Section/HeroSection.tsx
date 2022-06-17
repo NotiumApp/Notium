@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Blob } from "../Blob";
 
-const addEmail = (e) => {
+const addEmail = (e:any) => {
   e.preventDefault();
 
   console.log(e.target.value);
