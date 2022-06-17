@@ -13,6 +13,7 @@ export default async function handler(
 
     res.status(200).send("User added successfully");
   } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 }
