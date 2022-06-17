@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Blob } from "../Blob";
 
-const addEmail = (e:any) => {
+const addEmail = (e: any) => {
   e.preventDefault();
 
   console.log(e.target.value);
@@ -35,7 +35,7 @@ const HeroSection = () => {
                   url: "/api/email",
                   method: "POST",
                   data: {
-                    email: e.target.email.value,
+                    email: (e.target as any).email.value,
                   },
                 });
                 toast.success("Email added sucessfully!", {
