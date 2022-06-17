@@ -11,14 +11,14 @@ const addEmail = (e: any) => {
 
 const HeroSection = () => {
   return (
-    <div className="md:flex z-0 relative md:justify-center lg:mx-16 lg:mt-32">
+    <div className="md:flex z-0 relative md:justify-center lg:mx-16 lg:mt-32 pb-8 md:pb-0">
       <div className="flex flex-col-reverse lg:flex-row items-center space-x-0 space-y-8 lg:space-y-0 lg:space-x-24">
         <div className="space-y-6">
-          <h1 className="text-4xl md:text-5xl font-rubik font-black text-center lg:text-left">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-rubik font-black text-center lg:text-left">
             Computer Science <br /> notes,{" "}
             <span className="text-accent-primary">revolutionized</span>
           </h1>
-          <p className="text-gray-600 text-center lg:text-left text-lg font-rubik max-w-xl">
+          <p className="text-gray-600 text-center lg:text-left text-base md:text-lg font-rubik max-w-xl">
             Meet Notium, a notetaking app specialized for the field of CS.
             Whether you're a CS student or learning a new technology, we've got
             your back. Although we're currently building Notium right now, we

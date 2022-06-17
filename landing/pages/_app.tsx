@@ -8,7 +8,7 @@ function Notium({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>{appData.name} | Landing</title>
+        <title>{appData.name}</title>
         <link rel="shortcut icon" href="/logo/logo.png" />
 
         {/* Meta tags */}
