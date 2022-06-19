@@ -12,7 +12,7 @@ const addEmail = (e: any) => {
 const HeroSection = () => {
   return (
     <div className="md:flex z-0 relative md:justify-center lg:mx-16 lg:mt-32 pb-8 md:pb-0">
-      <div className="flex flex-col-reverse lg:flex-row items-center space-x-0 space-y-8 lg:space-y-0 lg:space-x-24">
+      <div className="flex flex-col-reverse lg:flex-row items-center space-x-0 space-y-8 lg:space-y-0 lg:space-x-12 xl:space-x-20">
         <div className="space-y-6">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-rubik font-black text-center lg:text-left">
             Computer Science <br /> notes,{" "}
@@ -23,7 +23,7 @@ const HeroSection = () => {
             Whether you're a CS student or learning a new technology, we've got
             your back. Although we're currently building Notium right now, we
             can notify you when our product launches and even give you an early
-            sneak peek at Notium!
+            sneak peek!
           </p>
 
           <form
@@ -60,7 +60,7 @@ const HeroSection = () => {
                 });
               }
             }}
-            className="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0 justify-center"
+            className="flex flex-col md:flex-row md:space-x-2 space-x-0 space-y-2 md:space-y-0 justify-end lg:justify-start"
           >
             <div className="relative w-full md:w-[25rem]">
               <input
@@ -81,7 +81,7 @@ const HeroSection = () => {
         <div>
           <img
             src="/computer.svg"
-            className="lg:block w-full max-w-lg lg:max-w-none z-40 relative"
+            className="w-full max-w-lg lg:max-w-none z-40 relative"
           />
 
           <Blob />
