@@ -1,26 +1,14 @@
 import React, { useState } from "react";
 
-//For each navbar element
-const navbarPages = ["Test", "Something", "Login"];
-const navbarElements = navbarPages.map((navbarPage) => (
-  <a
-    key={navbarPage}
-    className="no-underline text-gray-800 font-semibold"
-    href={`#${navbarPage}`}
-  >
-    {navbarPage}
-  </a>
-));
+import { FaTwitter } from "react-icons/fa";
 
 //Navbar
 const Navbar = () => {
-  const [navbarOpen, setNavbarOpen] = useState(false);
-
   return (
     <div>
-      <div className="flex items-center justify-between p-4">
+      <div className="z-40 relative w-full bg-transparent flex items-center justify-between p-4">
         <div className="flex items-center">
-          <a className="text-2xl font-bold font-righteous no-underline text-accent-primary">
+          <a className="text-2xl font-bold font-righteous no-underline text-accent-primary select-none">
             notium
           </a>
         </div>
@@ -33,6 +21,11 @@ const Navbar = () => {
         >
           {navbarOpen ? <FaTimes size={25} /> : <FiMenu size={25} />}
         </button> */}
+        <div>
+          <a href="https://twitter.com/NotiumApp">
+            <FaTwitter size={30} className="text-[#1DA1F2]" />
+          </a>
+        </div>
       </div>
 
       {/* {navbarOpen && <NavbarMobileMenu>{navbarElements}</NavbarMobileMenu>} */}
