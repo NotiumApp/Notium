@@ -28,7 +28,7 @@ if (typeof navigator !== "undefined") {
 interface NotePageProps {
   notes: any;
 }
-
+type View = "markdown" | "rendered" | "both";
 const NotePage: NextPage<NotePageProps> = () => {
   const [notes, setNotesMetaData] = useState<any>({});
   const [notesTitle, setNotesTitle] = useState<any>("");
@@ -38,6 +38,7 @@ const NotePage: NextPage<NotePageProps> = () => {
     "Start typing here with Markdown! Click the title of the note to edit it."
   );
 
+  const [view, setView] = useState<View>("both");
   // react codemirror 2 does some weird stuff hence why we use this (sidenote: this hurts to use)
   const [initialBody, setInitialBody] = useState("");
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -45,6 +46,9 @@ const NotePage: NextPage<NotePageProps> = () => {
 
   useEffect(() => {
     (async () => {
+      const localView: View = (localStorage.getItem("view") as View) || "both";
+      setView(localView);
+
       user?.getIdToken(true).then(async (idToken) => {
         const newSocket = io(
           process.env.NEXT_SOCKET_PUBLIC_API_URL || "http://localhost:5000",
@@ -113,7 +117,7 @@ const NotePage: NextPage<NotePageProps> = () => {
             }}
           />
         </div>
-        <div className="w-full flex">
+        <div className="w-full flex justify-center">
           <CodeMirror
             value={initialBody}
             options={{
@@ -126,11 +130,15 @@ const NotePage: NextPage<NotePageProps> = () => {
               setBody(value);
               socket?.emit("update", value);
             }}
-            className="h-full resize-none p-4 w-1/2  "
+            className={`h-full resize-none p-4 w-1/2 ${
+              view === "markdown" || view === "both" ? "" : "hidden"
+            }`}
           />
 
           <ReactMarkdown
-            className="h-full p-4 overflow-y-auto prose w-1/2"
+            className={`h-full p-4 overflow-y-auto prose w-1/2 ${
+              view === "rendered" || view === "both" ? "" : "hidden"
+            }`}
             remarkPlugins={[remarkGfm]}
             children={
               body
