@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { FaTwitter } from "react-icons/fa";
+import { FaTwitter, FaDiscord } from "react-icons/fa";
 
 //Navbar
 const Navbar = () => {
@@ -21,10 +21,17 @@ const Navbar = () => {
         >
           {navbarOpen ? <FaTimes size={25} /> : <FiMenu size={25} />}
         </button> */}
-        <div>
-          <a href="https://twitter.com/NotiumApp">
-            <FaTwitter size={30} className="text-[#1DA1F2]" />
-          </a>
+        <div className="flex space-x-4">
+          <div>
+            <a href="https://twitter.com/NotiumApp">
+              <FaTwitter size={30} className="text-[#1DA1F2]" />
+            </a>
+          </div>
+          <div>
+            <a href="https://discord.gg/SMpbQ8nzTc">
+              <FaDiscord size={30} className="text-[#5865F2]" />
+            </a>
+          </div>
         </div>
       </div>
 
