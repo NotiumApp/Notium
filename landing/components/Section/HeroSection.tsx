@@ -1,5 +1,6 @@
 //Hero section, right below the navbar
 import axios from "axios";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { Blob } from "../Blob";
 
@@ -10,6 +11,7 @@ const addEmail = (e: any) => {
 };
 
 const HeroSection = () => {
+  const [loading, setLoading] = useState(false);
   return (
     <div className="md:flex z-0 relative md:justify-center lg:mx-16 lg:mt-32 pb-8 md:pb-0">
       <div className="flex flex-col-reverse lg:flex-row items-center space-x-0 space-y-8 lg:space-y-0 lg:space-x-12 xl:space-x-20">
@@ -30,6 +32,8 @@ const HeroSection = () => {
             onSubmit={async (e) => {
               e.preventDefault();
 
+              setLoading(true);
+
               try {
                 const { data } = await axios({
                   url: "/api/email",
@@ -38,6 +42,10 @@ const HeroSection = () => {
                     email: (e.target as any).email.value,
                   },
                 });
+
+                if (data) {
+                  setLoading(false);
+                }
                 toast.success("Email added sucessfully!", {
                   position: "top-right",
                   autoClose: 5000,
@@ -47,6 +55,8 @@ const HeroSection = () => {
                   draggable: true,
                   progress: undefined,
                 });
+
+                e.target.email.value = "";
               } catch (err) {
                 console.log("An error has occurred", err);
                 toast.error("Hmm, something went wrong", {
@@ -67,12 +77,14 @@ const HeroSection = () => {
                 className="px-4 py-1 bg-fg border-2 border-accent-primary outline-none ring-variant-2 focus:ring-2 rounded-lg w-full h-[4rem] font-rubik"
                 placeholder="example@email.com"
                 type={"email"}
+                disabled={loading}
                 name="email"
               />
             </div>
             <input
               type="submit"
-              value="Join Waitlist"
+              value={!loading ? "Join Waitlist" : "Submitting..."}
+              disabled={loading}
               className="bg-accent-primary text-white text-sm font-rubik font-semibold rounded-xl px-4 py-4 md:py-2 cursor-pointer transition duration-150 ease-in-out hover:bg-[#16a085]"
             />
           </form>
