@@ -117,7 +117,20 @@ const NotePage: NextPage<NotePageProps> = () => {
             }}
           />
         </div>
-        <div className="w-full flex justify-center">
+
+        <select
+          onChange={(e) => {
+            setView(e.target.value as View);
+            localStorage.setItem("view", e.target.value);
+          }}
+          className="rounded-md bg-white text-black font-sans p-1 font-medium text-xs border border-black ml-4"
+          value={view}
+        >
+          <option value={"markdown"}>Markdown</option>
+          <option value="rendered">Rendered</option>
+          <option value={"both"}>Both</option>
+        </select>
+        <div className="w-full flex">
           <CodeMirror
             value={initialBody}
             options={{
@@ -130,15 +143,15 @@ const NotePage: NextPage<NotePageProps> = () => {
               setBody(value);
               socket?.emit("update", value);
             }}
-            className={`h-full resize-none p-4 w-1/2 ${
+            className={`h-full   p-4  ${
               view === "markdown" || view === "both" ? "" : "hidden"
-            }`}
+            } ${view === "markdown" ? "w-3/4 mx-auto h-full" : "w-1/2"}`}
           />
 
           <ReactMarkdown
             className={`h-full p-4 overflow-y-auto prose w-1/2 ${
               view === "rendered" || view === "both" ? "" : "hidden"
-            }`}
+            } ${view === "rendered" ? "w-3/4 mx-auto" : "w-1/2"}`}
             remarkPlugins={[remarkGfm]}
             children={
               body
