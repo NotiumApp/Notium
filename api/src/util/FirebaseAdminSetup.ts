@@ -28,6 +28,8 @@ export const firebaseAdminSetup = () => {
     }
     if (!c) throw err;
     firebaseConfig = c;
+
+    console.log("all good");
   }
 
   FirebaseAdmin.initializeApp({
