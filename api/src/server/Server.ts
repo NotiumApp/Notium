@@ -19,6 +19,8 @@ export class Server {
   public constructor() {
     this.app = express();
 
+    this.app.use(cors({ origin: "*" }));
+
     this.server = http.createServer(this.app);
 
     this.io = new SocketServer(this.server, {
@@ -55,8 +57,6 @@ export class Server {
         extended: false,
       })
     );
-
-    this.app.use(cors({ origin: "*" }));
 
     //log server requests & request method
     this.app.use(async (req, res, next) => {
