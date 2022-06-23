@@ -29,7 +29,7 @@
     "prismix": "npx prismix && prisma format",
     "run": "node index.js",
     "dev": "nodemon src/index.ts",
-    "lint": "prettier --write ."
+    "lint": "prettier --write .",
     "railyway": "prisma db push && ts-node src/index.ts"
   }
 }
