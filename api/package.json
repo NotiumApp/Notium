@@ -30,5 +30,6 @@
     "run": "node index.js",
     "dev": "nodemon src/index.ts",
     "lint": "prettier --write ."
+    "railyway": "prisma db push && ts-node src/index.ts"
   }
 }
