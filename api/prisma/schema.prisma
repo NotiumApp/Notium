@@ -15,9 +15,9 @@ model User {
 }
 
 model Note {
-  id      String  @id @default(uuid())
+  id      String @id @default(uuid())
   title   String
   body    String
-  User    User?   @relation(fields: [userUid], references: [uid])
-  userUid String?
+  User    User?  @relation(fields: [userUid], references: [uid])
+  userUid String
 }
