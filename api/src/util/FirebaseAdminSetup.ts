@@ -2,8 +2,15 @@ import fs from "fs";
 import path from "path";
 import FirebaseAdmin from "firebase-admin";
 
+interface FirebaseConfigType {
+	projectId:string;
+	clientEmail:string;
+	privateKey:string;
+
+}
+
 export const firebaseAdminSetup = () => {
-  let firebaseConfig: string;
+  let firebaseConfig: string | FirebaseConfigType;
 
   try {
     firebaseConfig = JSON.parse(
@@ -14,8 +21,11 @@ export const firebaseAdminSetup = () => {
     );
   } catch (err) {
     console.log(err);
-    console.log(process.env.FIREBASE_CONFIG);
-    let c = JSON.parse(process.env.FIREBASE_CONFIG);
+    const c={
+	projectId:process.env.FIREBASE_PROJECT_ID,
+    	clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    	privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    }
     if (!c) throw err;
     firebaseConfig = c;
   }
