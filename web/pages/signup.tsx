@@ -130,7 +130,7 @@ const SignUp: NextPage = () => {
             <input
               type="submit"
               value={"Create Account"}
-              className="cursor-pointer rounded-full bg-accent hover:bg-accent-hover transition w-full text-white font-bold p-3 text-xl"
+              className="cursor-pointer rounded-lg bg-accent hover:bg-accent-hover transition w-full text-white font-bold p-3 text-xl"
             />
             {/* <h4>Login</h4>
           </input> */}

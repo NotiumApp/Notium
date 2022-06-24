@@ -119,7 +119,7 @@ const Login: NextPage = () => {
             <input
               type="submit"
               value={"Login"}
-              className="rounded-full bg-accent hover:bg-accent-hover transition w-full text-white font-bold p-3 text-xl"
+              className="rounded-lg bg-accent hover:bg-accent-hover transition w-full text-white font-bold p-3 text-xl"
             />
 
             {/* <h4>Login</h4>
