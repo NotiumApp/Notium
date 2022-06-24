@@ -10,9 +10,13 @@ import {
 } from "firebase/auth";
 import { auth } from "../util/initFirebase";
 import React from "react";
+import { registerUser } from "../util/registerUser";
+import { useRouter } from "next/router";
 
 const Login: NextPage = () => {
   // const auth = getAuth();
+
+  const router = useRouter();
 
   const signInUser = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -36,17 +40,17 @@ const Login: NextPage = () => {
 
   return (
     <div className="min-h-screen p-16">
-      <div className="space-y-4">
+      <div className="space-y-4 max-w-2xl mx-auto">
         <h1>Login</h1>
         <p>Let's jump back into an awesome notetaking experience</p>
 
         <button
-          className="rounded-full bg-white text-black p-2 w-full flex justify-center space-x-4 items-center"
+          className="rounded-full bg-black text-white p-2 w-full flex justify-center space-x-4 items-center"
           onClick={() => {
             const provider = new GithubAuthProvider();
             console.log(provider);
             signInWithPopup(auth, provider)
-              .then((result) => {
+              .then(async (result) => {
                 // This gives you a GitHub Access Token. You can use it to access the GitHub API.
                 const credential =
                   GithubAuthProvider.credentialFromResult(result);
@@ -54,7 +58,11 @@ const Login: NextPage = () => {
 
                 // The signed-in user info.
                 const user = result.user;
-                console.log(user);
+
+                await user.getIdToken(true).then(async (idToken) => {
+                  const result = await registerUser(idToken);
+                  router.push("/");
+                });
 
                 // ...
               })
@@ -75,7 +83,7 @@ const Login: NextPage = () => {
           }}
         >
           <FaGithub className="text-2xl" />
-          <h4 className="text-black text-lg">Sign in with GitHub</h4>
+          <h4 className="text-white text-lg">Sign in with GitHub</h4>
         </button>
 
         <p className="text-center">or</p>
@@ -91,7 +99,7 @@ const Login: NextPage = () => {
                   placeholder="mail@example.com"
                   type={"email"}
                   autoComplete="email"
-                  className="outline-none rounded-full w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
+                  className="outline-none rounded-lg ring-2 ring-accent w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
                 />
               </div>
 
@@ -104,7 +112,7 @@ const Login: NextPage = () => {
                   placeholder="••••••••••"
                   type={"password"}
                   autoComplete="password"
-                  className="outline-none rounded-full w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
+                  className="outline-none rounded-lg ring-2 ring-accent w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
                 />
               </div>
             </div>
@@ -120,8 +128,8 @@ const Login: NextPage = () => {
 
           <p className="mt-5">
             Not the right page?{" "}
-            <a href="/login" className="underline">
-              Login
+            <a href="/signup" className="underline">
+              Sign Up
             </a>
           </p>
         </div>

@@ -8,8 +8,8 @@
 
 :root {
   --background: #ffffff;
-  --accent: #000;
-  --accent-hover: #000;
+  --accent: #00b894;
+  --accent-hover: #16a085;
 }
 
 @layer base {

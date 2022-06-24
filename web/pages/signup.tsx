@@ -50,12 +50,12 @@ const SignUp: NextPage = () => {
 
   return (
     <div className="min-h-screen p-16">
-      <div className="space-y-4">
+      <div className="space-y-4 max-w-2xl mx-auto">
         <h1>Sign Up</h1>
         <p>Get ready to supercharge your notes with Notium!</p>
 
         <button
-          className="rounded-full bg-white text-black p-2 w-full flex justify-center space-x-4 items-center"
+          className="rounded-lg bg-black text-white p-2 w-full flex justify-center space-x-4 items-center"
           onClick={() => {
             const provider = new GithubAuthProvider();
             console.log(provider);
@@ -93,7 +93,7 @@ const SignUp: NextPage = () => {
           }}
         >
           <FaGithub className="text-2xl" />
-          <h4 className="text-black text-lg">Create account with GitHub</h4>
+          <h4 className="text-white text-lg">Create account with GitHub</h4>
         </button>
 
         <p className="text-center">or</p>
@@ -109,7 +109,7 @@ const SignUp: NextPage = () => {
                   placeholder="mail@example.com"
                   type={"email"}
                   autoComplete="email"
-                  className="outline-none rounded-full w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
+                  className="outline-none rounded-lg ring-2 ring-accent w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
                 />
               </div>
 
@@ -122,7 +122,8 @@ const SignUp: NextPage = () => {
                   placeholder="••••••••••"
                   type={"password"}
                   autoComplete="password"
-                  className="outline-none rounded-full w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
+                  // className="outline-none rounded-full w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
+                  className="outline-none rounded-lg ring-2 ring-accent w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
                 />
               </div>
             </div>

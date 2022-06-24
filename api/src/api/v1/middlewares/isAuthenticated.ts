@@ -7,7 +7,6 @@ export const isAuthenticated = async (
   next: NextFunction
 ) => {
   const authToken = req.headers.authorization;
-  console.log(authToken, "authToken");
 
   try {
     const user = await FirebaseAdmin.auth().verifyIdToken(authToken);
