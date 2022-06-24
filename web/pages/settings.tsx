@@ -6,25 +6,36 @@ import {
   useUpdateEmail,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import { HiOutlineAtSymbol, HiOutlinePencil } from "react-icons/hi";
+import { HiLogout, HiOutlineAtSymbol, HiOutlinePencil } from "react-icons/hi";
 import { auth } from "../util/initFirebase";
+import { useRouter } from "next/router";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Settings: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
   const [updateProfile, updating, profileError] = useUpdateProfile(auth);
   const [updateEmail, emailUpdating, emailError] = useUpdateEmail(auth);
-
+  const router = useRouter();
   const [email, setEmail] = useState<string>();
   const [name, setName] = useState<string>();
   useEffect(() => {
-    user
-      ? user.getIdToken(true).then(async (idToken) => {
-          console.log(idToken);
-        })
-      : null;
+    // user
+    //   ? user.getIdToken(true).then(async (idToken) => {
+    //       console.log(idToken);
+    //     })
+    //   : null;
 
-    setName(user?.displayName || "");
-    setEmail(user?.email || "");
+    // if (!user) {
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setName(user?.displayName || "");
+        setEmail(user?.email || "");
+      } else {
+        router.push("/");
+      }
+    });
+    // }
   }, [user]);
   return (
     <>
@@ -40,7 +51,6 @@ const Settings: NextPage = () => {
               This information is not public and will not be shown to anybody.
             </p>
           </div>
-
           <div className="flex items-center space-x-8">
             <div className="space-y-6 w-1/2">
               <div>
@@ -60,7 +70,15 @@ const Settings: NextPage = () => {
                   />
                 </div>
               </div>
-              <div className="space-y-2">
+
+              <button
+                onClick={() => {}}
+                className="bg-red-600 w-full text-white px-6 text-md font-semibold rounded-lg hover:bg-red-700 transition duration-150 py-2 flex justify-center space-x-3 items-center"
+              >
+                <HiLogout size={20} />
+                <p className="text-white text-md font-semibold">Log Out</p>{" "}
+              </button>
+              {/* <div className="space-y-2">
                 <label className="text-sm font-medium" htmlFor="email">
                   Email
                 </label>
@@ -74,18 +92,26 @@ const Settings: NextPage = () => {
                     placeholder="john@example.com"
                     onChange={async (e) => {
                       setEmail(e.target.value);
-                      await updateEmail(e.target.value);
+
+                      try {
+                        await updateEmail(e.target.value);
+                      } catch (err) {
+                        console.log(err);
+                      }
                     }}
                     value={email}
                     className="rounded-r-md text-sm outline-none border-2 border-slate-300 py-2 px-4 w-full text-slate-400"
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="space-y-2">
               {/* TODO: fix this to actual default avatar */}
               <img
-                src={user?.photoURL || "DEFAULT AVATAR"}
+                src={
+                  user?.photoURL ||
+                  `https://avatars.dicebear.com/api/bottts/${name}.svg`
+                }
                 className="w-40 h-40 rounded-full"
               />
               <div className="flex justify-center">

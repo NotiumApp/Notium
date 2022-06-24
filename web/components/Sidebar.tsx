@@ -53,7 +53,7 @@ export const Sidebar = ({
   return (
     <>
       <div className="bg-slate-100 fixed z-40 w-72 left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
-        <div className="px-2 overflow-auto">
+        <div className="px-2 overflow-auto space-y-1">
           <div className="flex justify-between w-full mb-2">
             <p className="text-base font-bold">Your notes</p>
             <button

@@ -19,6 +19,7 @@ import "codemirror/theme/neo.css";
 import { stderr } from "process";
 import { HiPlay } from "react-icons/hi";
 import Select from "react-select/";
+import { onAuthStateChanged } from "firebase/auth";
 
 if (typeof navigator !== "undefined") {
   require("codemirror/mode/javascript/javascript");
@@ -48,6 +49,12 @@ const NotePage: NextPage<NotePageProps> = () => {
     (async () => {
       const localView: View = (localStorage.getItem("view") as View) || "both";
       setView(localView);
+
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          router.push("/login");
+        }
+      });
 
       user?.getIdToken(true).then(async (idToken) => {
         const newSocket = io(
