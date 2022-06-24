@@ -9,7 +9,8 @@ import {
 import { HiLogout, HiOutlineAtSymbol, HiOutlinePencil } from "react-icons/hi";
 import { auth } from "../util/initFirebase";
 import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import toast from "react-hot-toast";
 
 const Settings: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -72,7 +73,15 @@ const Settings: NextPage = () => {
               </div>
 
               <button
-                onClick={() => {}}
+                onClick={() => {
+                  signOut(auth)
+                    .then(() => {
+                      router.push("/login");
+                    })
+                    .catch((err) => {
+                      toast.error("We couldn't log you out :(");
+                    });
+                }}
                 className="bg-red-600 w-full text-white px-6 text-md font-semibold rounded-lg hover:bg-red-700 transition duration-150 py-2 flex justify-center space-x-3 items-center"
               >
                 <HiLogout size={20} />
