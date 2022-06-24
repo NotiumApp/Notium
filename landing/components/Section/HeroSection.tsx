@@ -56,7 +56,7 @@ const HeroSection = () => {
                   progress: undefined,
                 });
 
-                e.target.email.value = "";
+                (e.target as any).email.value = "";
               } catch (err) {
                 console.log("An error has occurred", err);
                 toast.error("Hmm, something went wrong", {
