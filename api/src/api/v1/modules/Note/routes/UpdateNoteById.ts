@@ -8,16 +8,17 @@ export const UpdateNoteById = () => {
   router.put("/", async (req, res) => {
     const { noteId, noteBody } = req.body;
 
-    console.log(noteId)
+    console.log(noteId);
 
-    const note = await prisma.note.update({
+    const note = await prisma.note.updateMany({
       where: {
-        id: noteId
+        id: noteId,
+        userUid: res.locals.user.uid,
       },
 
       data: {
-        body: noteBody
-      }
+        body: noteBody,
+      },
     });
 
     if (!note) {

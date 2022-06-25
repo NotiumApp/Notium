@@ -13,6 +13,7 @@ export const ReadNoteById = () => {
     const note = await prisma.note.findFirst({
       where: {
         id: noteId,
+        userUid: res.locals.user.uid,
       },
     });
 

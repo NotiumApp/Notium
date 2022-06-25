@@ -6,7 +6,11 @@ export const ReadAllNotes = () => {
   const router = Router();
 
   router.post("/", async (req, res) => {
-    const notes = await prisma.note.findMany({});
+    const notes = await prisma.note.findMany({
+      where: {
+        userUid: res.locals.user.uid,
+      },
+    });
 
     if (!notes) {
       res.json({ success: false, message: "There are currently no notes" });
