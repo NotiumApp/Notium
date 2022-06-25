@@ -107,7 +107,7 @@ const Login: NextPage = () => {
           <form onSubmit={signInUser} className="space-y-12">
             <div className="space-y-8">
               <div className="space-y-2">
-                <label htmlFor="email" className="text-white font-bold">
+                <label htmlFor="email" className="font-bold">
                   Email
                 </label>
                 <input
@@ -120,7 +120,7 @@ const Login: NextPage = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="email" className="text-white font-bold">
+                <label htmlFor="email" className="font-bold">
                   Password
                 </label>
                 <input
