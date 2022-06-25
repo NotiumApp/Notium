@@ -46,51 +46,49 @@ const NotePage: NextPage<NotePageProps> = () => {
   const notesNiue = useStore(null);
 
   useEffect(() => {
-    (async () => {
-      const localView: View = (localStorage.getItem("view") as View) || "both";
-      setView(localView);
+    const localView: View = (localStorage.getItem("view") as View) || "both";
+    setView(localView);
 
-      onAuthStateChanged(auth, (user) => {
-        if (!user) {
-          router.push("/login");
-        }
-      });
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/login");
+      }
+    });
 
-      user?.getIdToken(true).then(async (idToken) => {
-        const newSocket = io(
-          process.env.NEXT_PUBLIC_SOCKET_API_URL || "http://localhost:5000",
-          {
-            auth: {
-              authToken: idToken,
-            },
-            query: {
-              noteId: router.query.noteid,
-            },
-          }
-        );
-
-        setSocket(newSocket);
-
-        const { data } = await api({
-          url: "/note/read/",
-          method: "POST",
-          data: {
+    user?.getIdToken(true).then(async (idToken) => {
+      const newSocket = io(
+        process.env.NEXT_PUBLIC_SOCKET_API_URL || "http://localhost:5000",
+        {
+          auth: {
+            authToken: idToken,
+          },
+          query: {
             noteId: router.query.noteid,
           },
-          headers: {
-            Authorization: idToken,
-          },
-        });
+        }
+      );
 
-        console.log(data.note);
+      setSocket(newSocket);
 
-        setNotesMetaData(data.note);
-        setNotesTitle(data.note.title);
-        setBody(data.note.body);
-        setInitialBody(data.note.body);
-        console.log("IM HERE INNIT", initialBody);
+      const { data } = await api({
+        url: "/note/read/",
+        method: "POST",
+        data: {
+          noteId: router.query.noteid,
+        },
+        headers: {
+          Authorization: idToken,
+        },
       });
-    })();
+
+      console.log(data.note);
+
+      setNotesMetaData(data.note);
+      setNotesTitle(data.note.title);
+      setBody(data.note.body);
+      setInitialBody(data.note.body);
+      console.log("IM HERE INNIT", initialBody);
+    });
   }, [user, router]);
 
   return (

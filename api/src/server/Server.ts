@@ -8,6 +8,7 @@ import http from "http";
 import { Server as SocketServer } from "socket.io";
 import FirebaseAdmin from "firebase-admin";
 import bodyParser from "body-parser";
+import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 
 //Server configuration and setup
 export class Server {
@@ -138,9 +139,9 @@ export class Server {
       console.log("Client connected to socket.io");
       const { authToken } = socket.handshake.auth;
       const { noteId } = socket.handshake.query;
-
-      const user = await FirebaseAdmin.auth().verifyIdToken(authToken);
+      let user: DecodedIdToken;
       try {
+        user = await FirebaseAdmin.auth().verifyIdToken(authToken);
         if (user) {
           const note = await prisma.note.findFirst({
             where: {

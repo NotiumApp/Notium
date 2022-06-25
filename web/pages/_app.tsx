@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { Toaster } from "react-hot-toast";
-import { Head } from "next/document";
+import Head from "next/head";
 import { appData } from "../util/appData";
 // import { initFirebase } from "../util/initFirebase";
 
