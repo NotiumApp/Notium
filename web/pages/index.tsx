@@ -28,7 +28,10 @@ const Home: NextPage = () => {
         <Sidebar />
         <div className="ml-72 w-full h-screen flex items-center justify-center">
           <div className="max-w-xl space-y-2">
-            <h2>Hey, {user?.displayName}!</h2>
+            <h2>
+              Hey
+              {user && user?.displayName ? `, ${user?.displayName}` : " there"}!
+            </h2>
             <h4 className="font-medium">
               Get started by click the "+" icon in the sidebar to your left to
               create a note!

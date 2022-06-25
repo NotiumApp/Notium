@@ -14,6 +14,7 @@ import React from "react";
 import { api } from "../util/api";
 import { registerUser } from "../util/registerUser";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 const SignUp: NextPage = () => {
   // const auth = getAuth();
@@ -36,6 +37,8 @@ const SignUp: NextPage = () => {
         // Signed in
         const user = userCredential.user;
 
+        console.log("hi");
+
         await user.getIdToken(true).then(async (idToken) => {
           const result = await registerUser(idToken);
           router.push("/");
@@ -45,6 +48,7 @@ const SignUp: NextPage = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        toast.error(error.message);
       });
   };
 
@@ -86,7 +90,9 @@ const SignUp: NextPage = () => {
                 const credential =
                   GithubAuthProvider.credentialFromError(error);
 
-                console.log(error);
+                console.log("hi", error);
+
+                toast.error(error.message);
 
                 // ...
               });

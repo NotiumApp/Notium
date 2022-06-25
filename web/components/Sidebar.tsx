@@ -154,7 +154,12 @@ export const Sidebar = ({
         <a href="/settings">
           <div className="p-4 bg-slate-200 rounded-t-xl flex items-center space-x-4">
             <img
-              src={user?.photoURL || ""}
+              src={
+                (user && user?.photoURL) ||
+                `https://avatars.dicebear.com/api/bottts/${
+                  (user && user.displayName) || "user"
+                }.svg`
+              }
               alt="user"
               className="w-12 h-12 rounded-full"
             />
