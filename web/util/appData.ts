@@ -2,7 +2,7 @@
 export const appData = {
   name: "Notium",
   get description() {
-    return `${this.name}, a new way of notetaking for CS students.`;
+    return `${this.name}, the testable demo.`;
   },
   url: "https://notium.vercel.app",
   keywords:
