@@ -5,11 +5,12 @@ import { FaGithub } from "react-icons/fa";
 
 import {
   GithubAuthProvider,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "../util/initFirebase";
-import React from "react";
+import React, { useEffect } from "react";
 import { registerUser } from "../util/registerUser";
 import { useRouter } from "next/router";
 
@@ -17,6 +18,14 @@ const Login: NextPage = () => {
   // const auth = getAuth();
 
   const router = useRouter();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/");
+      }
+    });
+  }, []);
 
   const signInUser = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -26,10 +35,17 @@ const Login: NextPage = () => {
       password: { value: string };
     };
     signInWithEmailAndPassword(auth, target.email.value, target.password.value)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
+
         console.log(user);
+
+        await user.getIdToken(true).then(async (idToken) => {
+          const result = await registerUser(idToken);
+          router.push("/");
+        });
+
         // ...
       })
       .catch((error) => {

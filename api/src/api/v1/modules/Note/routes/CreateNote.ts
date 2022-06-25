@@ -6,7 +6,7 @@ export const CreateNote = () => {
   const router = Router();
 
   router.post("/", async (req, res) => {
-     console.log(res.locals.user.uid, "iamhere");
+    console.log(res.locals.user.uid, "iamhere");
     const note = await prisma.note.create({
       data: {
         title: "Untitled Note",
