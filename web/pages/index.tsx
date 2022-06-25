@@ -24,6 +24,10 @@ const Home: NextPage = () => {
   }, [user]);
   return (
     <>
+      <Head>
+        <title>Notium Web App</title>
+        <meta property="og:title" content="Notium Web App" key="title" />
+      </Head>
       <div className="flex">
         <Sidebar />
         <div className="ml-72 w-full h-screen flex items-center justify-center">
