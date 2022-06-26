@@ -20,9 +20,9 @@ export const ReadNoteById = () => {
 
       if (!note) {
         res.json({ success: false, message: "That note doesn't exist!" });
+      } else {
+        res.json({ success: true, note: note });
       }
-
-      res.json({ success: true, note: note });
     } catch (err) {
       console.log("error has occurred in ReadNoteById!", err);
       res.status(500).send(err);

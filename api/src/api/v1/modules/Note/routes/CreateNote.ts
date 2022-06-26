@@ -20,9 +20,9 @@ export const CreateNote = () => {
         res
           .status(500)
           .json({ success: false, message: "Failed to create note" });
+      } else {
+        res.json({ success: true, note: note });
       }
-
-      res.json({ success: true, note: note });
     } catch (err) {
       console.log("error has occurred in CreateNote!", err);
       res.status(500).send(err);

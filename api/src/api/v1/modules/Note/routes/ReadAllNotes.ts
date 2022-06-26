@@ -15,9 +15,9 @@ export const ReadAllNotes = () => {
 
       if (!notes) {
         res.json({ success: false, message: "There are currently no notes" });
+      } else {
+        res.json({ success: true, notes: notes });
       }
-
-      res.json({ success: true, notes: notes });
     } catch (err) {
       console.log("error has occurred in ReadAllNotes!", err);
       res.status(500).send(err);

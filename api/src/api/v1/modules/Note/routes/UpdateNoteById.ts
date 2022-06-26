@@ -24,9 +24,9 @@ export const UpdateNoteById = () => {
 
       if (!note) {
         res.json({ success: false, message: "That note doesn't exist!" });
+      } else {
+        res.json({ success: true, note: note });
       }
-
-      res.json({ success: true, note: note });
     } catch (err) {
       console.log("error has occurred in UpdateNoteById!", err);
       res.status(500).send(err);
