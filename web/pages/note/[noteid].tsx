@@ -19,7 +19,7 @@ import "codemirror/theme/neo.css";
 import { stderr } from "process";
 import { HiPlay } from "react-icons/hi";
 import Select from "react-select/";
-import { onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 if (typeof navigator !== "undefined") {
   require("codemirror/mode/javascript/javascript");
@@ -55,7 +55,7 @@ const NotePage: NextPage<NotePageProps> = () => {
       }
     });
 
-    user?.getIdToken(true).then(async (idToken) => {
+    auth.currentUser.getIdToken(true).then(async (idToken) => {
       const newSocket = io(
         process.env.NEXT_PUBLIC_SOCKET_API_URL || "http://localhost:5000",
         {
