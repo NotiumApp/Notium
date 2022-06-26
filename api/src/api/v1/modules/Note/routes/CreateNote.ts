@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkAndCreateUser } from "src/util/checkAndCreateUser";
+import { checkAndCreateUser } from "../../../../../util/checkAndCreateUser";
 import { prisma } from "../../../db";
 
 //Creates a new note
