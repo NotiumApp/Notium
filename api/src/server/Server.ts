@@ -20,7 +20,7 @@ export class Server {
   public constructor() {
     this.app = express();
 
-    this.app.use(cors({ origin: "*" }));
+    this.app.use(cors());
 
     this.server = http.createServer(this.app);
 
