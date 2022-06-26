@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { checkAndCreateUser } from "src/util/checkAndCreateUser";
 import { prisma } from "../../../db";
 
 //Creates a new note
@@ -8,6 +9,15 @@ export const CreateNote = () => {
   router.post("/", async (req, res) => {
     try {
       console.log(res.locals.user.uid, "iamhere");
+
+      const { success, message } = await checkAndCreateUser(
+        res.locals.user.uid
+      );
+
+      if (!success) {
+        throw message;
+      }
+
       const note = await prisma.note.create({
         data: {
           title: "Untitled Note",
