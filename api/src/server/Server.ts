@@ -161,38 +161,46 @@ export class Server {
       }
 
       socket.on("update", async (body: string) => {
-        socket.broadcast.to(noteId).emit("update", body);
+        try {
+          socket.broadcast.to(noteId).emit("update", body);
 
-        const res = await prisma.note.updateMany({
-          where: {
-            id: noteId.toString(),
-            userUid: user.uid,
-          },
-          data: {
-            body: body,
-          },
-        });
+          const res = await prisma.note.updateMany({
+            where: {
+              id: noteId.toString(),
+              userUid: user.uid,
+            },
+            data: {
+              body: body,
+            },
+          });
 
-        if (!res) {
-          socket.disconnect();
+          if (!res) {
+            socket.disconnect();
+          }
+        } catch (err) {
+          console.log("ERROR", err);
         }
       });
 
       socket.on("updateTitle", async (title: string) => {
-        socket.broadcast.to(noteId).emit("updateTitle", title);
+        try {
+          socket.broadcast.to(noteId).emit("updateTitle", title);
 
-        const res = await prisma.note.updateMany({
-          where: {
-            id: noteId.toString(),
-            userUid: user.uid,
-          },
-          data: {
-            title: title,
-          },
-        });
+          const res = await prisma.note.updateMany({
+            where: {
+              id: noteId.toString(),
+              userUid: user.uid,
+            },
+            data: {
+              title: title,
+            },
+          });
 
-        if (!res) {
-          socket.disconnect();
+          if (!res) {
+            socket.disconnect();
+          }
+        } catch (err) {
+          console.log("ERROR", err);
         }
       });
     });
