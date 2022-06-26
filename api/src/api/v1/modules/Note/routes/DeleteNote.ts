@@ -19,6 +19,8 @@ export const DeleteNote = () => {
       res
         .status(500)
         .json({ success: false, message: "Failed to delete note" });
+
+      console.log("Error has occurred in DeleteNote!", err);
     }
   });
 
