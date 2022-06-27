@@ -18,7 +18,7 @@ export const Meta = ({
       description,
       images: [
         {
-          url: `${url}/logo/logo.png`,
+          url: `${url}/logo.png`,
           width: 1200,
           height: 2114,
           alt: "Notium",

@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "../components/Input";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
+import { Meta } from "../partials/Meta";
 
 export type LoginValues = {
   email: string;
@@ -36,51 +37,54 @@ const Login: NextPage = () => {
   });
 
   return (
-    <div className="h-screen grid place-items-center">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2 text-center">
-          <h2 className="font-semibold">notium.sh</h2>
-          <p className="text-lg">
-            Let's jump back into an awesome notetaking experience.
+    <>
+      <Meta title="Login | Notium" />
+      <div className="h-screen grid place-items-center">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 text-center">
+            <h2 className="font-semibold">notium.sh</h2>
+            <p className="text-lg">
+              Let's jump back into an awesome notetaking experience.
+            </p>
+          </div>
+          <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <Form
+              onSubmit={signInUser}
+              submitText="Login"
+              otherOptions={
+                <button
+                  className="px-4 py-2 flex justify-center items-center gap-1 w-full border-[1px] border-neutral-400 hover:bg-neutral-100 rounded-md mt-6"
+                  onClick={signInWithGithHub}
+                >
+                  <FaGithub className="text-lg" />
+                  <p className="text-md">GitHub</p>
+                </button>
+              }
+            >
+              <div className="space-y-6">
+                <Input
+                  placeholder="johndoe@example.com"
+                  labelText="Email"
+                  {...register("email")}
+                />
+                <Input
+                  labelText="Password"
+                  type="password"
+                  {...register("password")}
+                  placeholder="••••••••••••"
+                />
+              </div>
+            </Form>
+          </div>
+          <p className="text-center">
+            Don't have an account?{" "}
+            <Link href="/signup">
+              <a className="underline">Sign Up</a>
+            </Link>
           </p>
         </div>
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <Form
-            onSubmit={signInUser}
-            submitText="Login"
-            otherOptions={
-              <button
-                className="px-4 py-2 flex justify-center items-center gap-1 w-full border-[1px] border-neutral-400 hover:bg-neutral-100 rounded-md mt-6"
-                onClick={signInWithGithHub}
-              >
-                <FaGithub className="text-lg" />
-                <p className="text-md">GitHub</p>
-              </button>
-            }
-          >
-            <div className="space-y-6">
-              <Input
-                placeholder="johndoe@example.com"
-                labelText="Email"
-                {...register("email")}
-              />
-              <Input
-                labelText="Password"
-                type="password"
-                {...register("password")}
-                placeholder="••••••••••••"
-              />
-            </div>
-          </Form>
-        </div>
-        <p className="text-center">
-          Don't have an account?{" "}
-          <Link href="/signup">
-            <a className="underline">Sign Up</a>
-          </Link>
-        </p>
       </div>
-    </div>
+    </>
   );
 };
 
