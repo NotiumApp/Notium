@@ -20,6 +20,7 @@ import { stderr } from "process";
 import { HiPlay } from "react-icons/hi";
 import Select from "react-select/";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Spinner } from "../../components/Spinner";
 
 if (typeof navigator !== "undefined") {
   require("codemirror/mode/javascript/javascript");
@@ -183,6 +184,8 @@ const NotePage: NextPage<NotePageProps> = () => {
                 const [selectedLanguage, setSelectedLanguage] =
                   useState("auto-detect");
 
+                const [loading, setLoading] = useState(false);
+
                 useEffect(() => {
                   (async () => {
                     const clientRuntimes: Runtime[] = await client.runtimes();
@@ -216,7 +219,7 @@ const NotePage: NextPage<NotePageProps> = () => {
                       <button
                         onClick={async () => {
                           // [{ language: 'python', version: '3.9.4', aliases: ['py'] }, ...]
-
+                          setLoading(true);
                           console.log(runtimes, match);
 
                           const result = await client.execute(
@@ -227,6 +230,10 @@ const NotePage: NextPage<NotePageProps> = () => {
                             { version: "*" }
                           );
                           console.log(result);
+
+                          if (result) {
+                            setLoading(false);
+                          }
 
                           // if (result.compile.stderr) {
                           if (result.compile && result.compile.stderr) {
@@ -249,7 +256,7 @@ const NotePage: NextPage<NotePageProps> = () => {
                           }
                         }}
                       >
-                        <HiPlay size={35} />
+                        {loading ? <Spinner /> : <HiPlay size={35} />}
                       </button>
                       <select
                         onChange={(e) => {
