@@ -5,7 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import { auth } from "../util/initFirebase";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
