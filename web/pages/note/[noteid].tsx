@@ -95,7 +95,7 @@ const NotePage: NextPage<NotePageProps> = () => {
   return (
     <div className="flex">
       <Sidebar highlighted={router.query.noteid?.toString()} />
-      <div className="ml-72 px-8 h-[90vh] w-full">
+      <div className="ml-72 h-[90vh] w-full">
         <div className="py-4">
           <input
             value={notesTitle}
@@ -149,9 +149,12 @@ const NotePage: NextPage<NotePageProps> = () => {
               setBody(value);
               socket?.emit("update", value);
             }}
-            className={`overflow-y-auto h-full   p-4  ${
+            className={`overflow-y-auto h-full  pt-4  ${
               view === "markdown" || view === "both" ? "" : "hidden"
-            } ${view === "markdown" ? "w-3/4 mx-auto h-full" : "w-1/2"}`}
+            } ${view === "markdown" ? "w-3/4 mx-auto h-full" : "w-1/2"} ${
+              view === "both" ? "max-w-3xl" : ""
+            }
+            `}
           />
 
           <ReactMarkdown
@@ -206,7 +209,7 @@ const NotePage: NextPage<NotePageProps> = () => {
 
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
-                  <div>
+                  <div className="w-auto overflow-auto">
                     <SyntaxHighlighter
                       children={String(children).replace(/\n$/, "")}
                       style={dracula}
