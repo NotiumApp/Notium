@@ -149,7 +149,7 @@ const NotePage: NextPage<NotePageProps> = () => {
               setBody(value);
               socket?.emit("update", value);
             }}
-            className={`h-full   p-4  ${
+            className={`overflow-y-auto h-full   p-4  ${
               view === "markdown" || view === "both" ? "" : "hidden"
             } ${view === "markdown" ? "w-3/4 mx-auto h-full" : "w-1/2"}`}
           />
