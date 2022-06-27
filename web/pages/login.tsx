@@ -1,154 +1,84 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { FaGithub } from "react-icons/fa";
-
-import {
-  GithubAuthProvider,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../util/initFirebase";
-import React, { useEffect } from "react";
 import { registerUser } from "../util/registerUser";
 import { useRouter } from "next/router";
+import { signInWithGithHub } from "./signup";
+import { Form } from "../components/Form";
+import { useForm } from "react-hook-form";
+import { Input } from "../components/Input";
+import { FaGithub } from "react-icons/fa";
+import Link from "next/link";
+
+export type LoginValues = {
+  email: string;
+  password: string;
+};
 
 const Login: NextPage = () => {
-  // const auth = getAuth();
-
   const router = useRouter();
+  const { register, handleSubmit } = useForm<LoginValues>();
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.push("/");
-      }
-    });
-  }, []);
-
-  const signInUser = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    // e.target.email.value;
-    const target = e.target as typeof e.target & {
-      email: { value: string };
-      password: { value: string };
-    };
-    signInWithEmailAndPassword(auth, target.email.value, target.password.value)
+  const signInUser = handleSubmit(({ email, password }: LoginValues) => {
+    signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
-        // Signed in
         const user = userCredential.user;
-
-        console.log(user);
 
         await user.getIdToken(true).then(async (idToken) => {
           const result = await registerUser(idToken);
           router.push("/");
         });
-
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
       });
-  };
+  });
 
   return (
-    <div className="min-h-screen p-16">
-      <div className="space-y-4 max-w-2xl mx-auto">
-        <h1>Login</h1>
-        <p>Let's jump back into an awesome notetaking experience</p>
-
-        <button
-          className="rounded-full bg-black text-white p-2 w-full flex justify-center space-x-4 items-center"
-          onClick={() => {
-            const provider = new GithubAuthProvider();
-            console.log(provider);
-            signInWithPopup(auth, provider)
-              .then(async (result) => {
-                // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-                const credential =
-                  GithubAuthProvider.credentialFromResult(result);
-                const token = credential?.accessToken;
-
-                // The signed-in user info.
-                const user = result.user;
-
-                await user.getIdToken(true).then(async (idToken) => {
-                  const result = await registerUser(idToken);
-                  router.push("/");
-                });
-
-                // ...
-              })
-              .catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.email;
-                // The AuthCredential type that was used.
-                const credential =
-                  GithubAuthProvider.credentialFromError(error);
-
-                console.log(error);
-
-                // ...
-              });
-          }}
-        >
-          <FaGithub className="text-2xl" />
-          <h4 className="text-white text-lg">Sign in with GitHub</h4>
-        </button>
-
-        <p className="text-center">or</p>
-        <div>
-          <form onSubmit={signInUser} className="space-y-12">
-            <div className="space-y-8">
-              <div className="space-y-2">
-                <label htmlFor="email" className="font-bold">
-                  Email
-                </label>
-                <input
-                  name="email"
-                  placeholder="mail@example.com"
-                  type={"email"}
-                  autoComplete="email"
-                  className="outline-none rounded-lg ring-2 ring-accent w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="email" className="font-bold">
-                  Password
-                </label>
-                <input
-                  name="password"
-                  placeholder="••••••••••"
-                  type={"password"}
-                  autoComplete="password"
-                  className="outline-none rounded-lg ring-2 ring-accent w-full transition ease-in-out duration-150 py-2 px-6 font-bold text-gray-500 caret-gray-500"
-                />
-              </div>
-            </div>
-            <input
-              type="submit"
-              value={"Login"}
-              className="rounded-lg bg-accent hover:bg-accent-hover transition w-full text-white font-bold p-3 text-xl"
-            />
-
-            {/* <h4>Login</h4>
-          </input> */}
-          </form>
-
-          <p className="mt-5">
-            Not the right page?{" "}
-            <a href="/signup" className="underline">
-              Sign Up
-            </a>
+    <div className="h-screen grid place-items-center">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2 text-center">
+          <h2 className="font-semibold">notium.sh</h2>
+          <p className="text-lg">
+            Let's jump back into an awesome notetaking experience.
           </p>
         </div>
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <Form
+            onSubmit={signInUser}
+            submitText="Login"
+            otherOptions={
+              <button
+                className="px-4 py-2 flex justify-center items-center gap-1 w-full border-[1px] border-neutral-400 hover:bg-neutral-100 rounded-md mt-6"
+                onClick={signInWithGithHub}
+              >
+                <FaGithub className="text-lg" />
+                <p className="text-md">GitHub</p>
+              </button>
+            }
+          >
+            <div className="space-y-6">
+              <Input
+                placeholder="johndoe@example.com"
+                labelText="Email"
+                {...register("email")}
+              />
+              <Input
+                labelText="Password"
+                type="password"
+                {...register("password")}
+                placeholder="••••••••••••"
+              />
+            </div>
+          </Form>
+        </div>
+        <p className="text-center">
+          Don't have an account?{" "}
+          <Link href="/signup">
+            <a className="underline">Sign Up</a>
+          </Link>
+        </p>
       </div>
     </div>
   );
