@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../util/initFirebase";
 import { registerUser } from "../util/registerUser";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import { Input } from "../components/Input";
 import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { Meta } from "../partials/Meta";
+import { useEffect } from "react";
 
 export type LoginValues = {
   email: string;
@@ -19,6 +20,14 @@ export type LoginValues = {
 const Login: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm<LoginValues>();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/");
+      }
+    });
+  }, []);
 
   const signInUser = handleSubmit(({ email, password }: LoginValues) => {
     signInWithEmailAndPassword(auth, email, password)

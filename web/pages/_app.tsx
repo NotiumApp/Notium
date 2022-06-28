@@ -10,8 +10,8 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.push("/");
+      if (!user) {
+        router.push("/login");
       }
     });
   }, []);

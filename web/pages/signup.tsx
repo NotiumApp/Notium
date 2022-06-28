@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   GithubAuthProvider,
   updateProfile,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "../util/initFirebase";
 import { registerUser } from "../util/registerUser";
@@ -16,6 +17,7 @@ import { FaGithub } from "react-icons/fa";
 import Link from "next/link";
 import { LoginValues } from "./login";
 import { Meta } from "../partials/Meta";
+import { useEffect } from "react";
 
 export const signInWithGithHub = async () => {
   const provider = new GithubAuthProvider();
@@ -45,6 +47,14 @@ type SignUpValues = LoginValues & { username: string };
 const SignUp: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit } = useForm<SignUpValues>();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/");
+      }
+    });
+  }, []);
 
   const createUser = handleSubmit(
     ({ username: displayName, email, password }: SignUpValues) => {
