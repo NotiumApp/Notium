@@ -11,5 +11,4 @@ apiV1.get("/", (req, res) => {
 });
 
 apiV1.use("/auth", AuthRoutes);
-// apiV1.use("/note", isAuthenticated, NoteRoutes);
-apiV1.use("/note", NoteRoutes);
+apiV1.use("/note", isAuthenticated, NoteRoutes);
