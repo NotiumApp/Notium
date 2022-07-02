@@ -26,19 +26,20 @@ async function recursivelyGetNotes(note: any): Promise<any> {
   // const children = notes.children;
   // toReturn.children = [];
 
-  notes.children.map((child: any, i) => {
-    (async () => {
-      const childNotes = await recursivelyGetNotes(child);
-      // console.log(notes.id, "childNotes", childNotes);
-      console.log("i come first", notes.id, go);
-      if (childNotes) {
-        toReturn.children[i] = childNotes;
-        console.log("cry", notes.id, toReturn.children);
-      }
-    })();
-  });
+  // notes.children.map((child: any, i) => {
 
-  console.log("woowow", toReturn);
+  for (const child in toReturn.children) {
+    const childNotes = await recursivelyGetNotes(toReturn.children[child]);
+    // console.log(notes.id, "childNotes", childNotes);
+    // console.log("i come first", notes.id, go);
+    if (childNotes) {
+      toReturn.children[child] = childNotes;
+      // console.log("cry", notes.id, toReturn.children);
+    }
+  }
+  // });
+
+  // console.log("woowow", toReturn);
 
   return toReturn;
 }
@@ -58,10 +59,15 @@ export const ReadAllNotes = () => {
           children: true,
         },
       });
-      recursivelyGetNotes(notes[3]).then((result) => {
-        console.log("result", result);
-      });
-      // console.log(ack);
+      // recursivelyGetNotes(notes[3]).then((result) => {
+      //   console.log(JSON.stringify(result, null, 4));
+      // });
+
+      for (const noteIndex in notes) {
+        notes[noteIndex] = await recursivelyGetNotes(notes[noteIndex]);
+      }
+
+      console.log(JSON.stringify(notes, null, 4));
 
       if (!notes) {
         res.json({ success: false, message: "There are currently no notes" });
