@@ -50,13 +50,13 @@ export const Sidebar = ({
     });
   }, [user]);
 
-  const NoteDiv = ({ passedNote }) => {
+  const NoteDiv = ({ passedNote, child }) => {
     return (
-      <div className="w-full">
+      <div className="w-full space-y-1">
         <div
           className={`w-full cursor-pointer flex justify-between transition px-4 py-2 items-center hover:bg-slate-200 ${
             passedNote.id === highlighted ? "bg-slate-200" : ""
-          }`}
+          } ${child ? "pl-10" : ""}`}
         >
           <Link shallow href={`/note/${passedNote.id}`} key={passedNote.id}>
             <div className={`w-full`}>
@@ -101,9 +101,9 @@ export const Sidebar = ({
             </p>
           </button>
         </div>
-        <div className="pl-4">
+        <div className="">
           {passedNote.children.map((childNote) => {
-            return <NoteDiv passedNote={childNote} />;
+            return <NoteDiv passedNote={childNote} child={true} />;
           })}
         </div>
       </div>
