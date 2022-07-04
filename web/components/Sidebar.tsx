@@ -63,43 +63,88 @@ export const Sidebar = ({
               <p>{passedNote.title}</p>
             </div>
           </Link>
-          <button
-            onClick={() => {
-              user?.getIdToken(true).then(async (idToken) => {
-                try {
-                  const { data } = await api({
-                    url: "/note/delete",
-                    method: "POST",
-                    headers: {
-                      Authorization: idToken,
-                    },
-                    data: {
-                      id: passedNote.id,
-                    },
+          <div className="flex">
+            <button
+              onClick={() => {
+                user?.getIdToken(true).then(async (idToken) => {
+                  try {
+                    const { data } = await api({
+                      url: "/note/delete",
+                      method: "POST",
+                      headers: {
+                        Authorization: idToken,
+                      },
+                      data: {
+                        id: passedNote.id,
+                      },
+                    });
+                    console.log(data);
+                    let dummy: any = notes;
+                    dummy = dummy.filter(
+                      (newNote: any) => newNote.id !== passedNote.id
+                    );
+                    setNotes(dummy);
+                    setState(dummy);
+                    toast.success("Note deleted sucessfully");
+                    router.push(
+                      dummy.length > 0 ? `/note/${dummy[0].id}` : "/"
+                    );
+                  } catch (err) {
+                    toast.error("Hmm, something went wrong");
+                  }
+                });
+              }}
+            >
+              <p className="hover:text-gray-500 transition duration-150 ease-in-out p-1 rounded-md">
+                <HiX size={17} />
+              </p>
+            </button>
+
+            {passedNote.children.length > 0 ? (
+              <button
+                onClick={() => {
+                  user?.getIdToken(true).then(async (idToken) => {
+                    try {
+                      const createdNote = await api({
+                        url: "/note/create/",
+                        method: "POST",
+                        headers: {
+                          Authorization: idToken,
+                        },
+                        data: {
+                          parentId: passedNote.id,
+                        },
+                      });
+
+                      const { data } = await api({
+                        url: "/note/read/all",
+                        method: "POST",
+                        data: {
+                          authToken: idToken,
+                        },
+                        headers: {
+                          Authorization: idToken,
+                        },
+                      });
+
+                      setState(data.notes);
+
+                      setNotes(data.notes);
+                      router.push(`/note/${createdNote.data.note.id}`);
+                    } catch (err) {
+                      console.log("err", err);
+                    }
                   });
-
-                  console.log(data);
-
-                  let dummy: any = notes;
-
-                  dummy = dummy.filter(
-                    (newNote: any) => newNote.id !== passedNote.id
-                  );
-
-                  setNotes(dummy);
-                  setState(dummy);
-                  toast.success("Note deleted sucessfully");
-                  router.push(dummy.length > 0 ? `/note/${dummy[0].id}` : "/");
-                } catch (err) {
-                  toast.error("Hmm, something went wrong");
-                }
-              });
-            }}
-          >
-            <p className="hover:text-gray-500 transition duration-150 ease-in-out p-1 rounded-md">
-              <HiX size={17} />
-            </p>
-          </button>
+                }}
+              >
+                <p className=" hover:bg-slate-300 transition duration-150 ease-in-out p-1 rounded-md">
+                  <HiPlus size={17} />
+                </p>
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
         </div>
         <div className="">
           {passedNote.children.map((childNote) => {
@@ -156,7 +201,7 @@ export const Sidebar = ({
             </button>
           </div>
           {notes.map((note: Notes, i) => {
-            return <NoteDiv passedNote={note} />;
+            return <NoteDiv passedNote={note} child={false} />;
           })}
         </div>
         <a href="/settings">

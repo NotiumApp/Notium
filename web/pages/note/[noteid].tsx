@@ -56,7 +56,7 @@ const NotePage: NextPage<NotePageProps> = () => {
       }
     });
 
-    auth.currentUser.getIdToken(true).then(async (idToken) => {
+    user?.getIdToken(true).then(async (idToken) => {
       const newSocket = io(
         process.env.NEXT_PUBLIC_SOCKET_API_URL || "http://localhost:5000",
         {

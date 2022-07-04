@@ -23,6 +23,7 @@ export const CreateNote = () => {
           title: "Untitled Note",
           body: "Start typing here with [Markdown](https://www.markdownguide.org/)!",
           userUid: res.locals.user.uid,
+          parentId: req.body.parentId || null,
         },
       });
 
