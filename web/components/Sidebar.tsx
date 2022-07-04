@@ -50,11 +50,71 @@ export const Sidebar = ({
     });
   }, [user]);
 
+  const NoteDiv = ({ passedNote }) => {
+    return (
+      <div className="w-full">
+        <div
+          className={`w-full cursor-pointer flex justify-between transition px-4 py-2 items-center hover:bg-slate-200 ${
+            passedNote.id === highlighted ? "bg-slate-200" : ""
+          }`}
+        >
+          <Link shallow href={`/note/${passedNote.id}`} key={passedNote.id}>
+            <div className={`w-full`}>
+              <p>{passedNote.title}</p>
+            </div>
+          </Link>
+          <button
+            onClick={() => {
+              user?.getIdToken(true).then(async (idToken) => {
+                try {
+                  const { data } = await api({
+                    url: "/note/delete",
+                    method: "POST",
+                    headers: {
+                      Authorization: idToken,
+                    },
+                    data: {
+                      id: passedNote.id,
+                    },
+                  });
+
+                  console.log(data);
+
+                  let dummy: any = notes;
+
+                  dummy = dummy.filter(
+                    (newNote: any) => newNote.id !== passedNote.id
+                  );
+
+                  setNotes(dummy);
+                  setState(dummy);
+                  toast.success("Note deleted sucessfully");
+                  router.push(dummy.length > 0 ? `/note/${dummy[0].id}` : "/");
+                } catch (err) {
+                  toast.error("Hmm, something went wrong");
+                }
+              });
+            }}
+          >
+            <p className="hover:text-gray-500 transition duration-150 ease-in-out p-1 rounded-md">
+              <HiX size={17} />
+            </p>
+          </button>
+        </div>
+        <div className="pl-4">
+          {passedNote.children.map((childNote) => {
+            return <NoteDiv passedNote={childNote} />;
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="bg-slate-100 fixed z-40 w-72 left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
-        <div className="px-2 overflow-auto space-y-1">
-          <div className="flex justify-between w-full mb-2">
+        <div className="px-0 overflow-auto space-y-1">
+          <div className="flex justify-between mx-2 mb-2">
             <p className="text-base font-bold">Your notes</p>
             <button
               onClick={() => {
@@ -96,59 +156,7 @@ export const Sidebar = ({
             </button>
           </div>
           {notes.map((note: Notes, i) => {
-            return (
-              <div
-                className={`cursor-pointer flex justify-between transition rounded-md  px-4 py-2 items-center hover:bg-slate-200 ${
-                  note.id === highlighted ? "bg-slate-200" : ""
-                }`}
-              >
-                <Link shallow href={`/note/${note.id}`} key={i}>
-                  <div className={`w-full`}>
-                    <p>{note.title}</p>
-                  </div>
-                </Link>
-                <button
-                  onClick={() => {
-                    console.log("hi hihiihihi", note.id, note.title);
-                    user?.getIdToken(true).then(async (idToken) => {
-                      try {
-                        const { data } = await api({
-                          url: "/note/delete",
-                          method: "POST",
-                          headers: {
-                            Authorization: idToken,
-                          },
-                          data: {
-                            id: note.id,
-                          },
-                        });
-
-                        console.log(data);
-
-                        let dummy: any = notes;
-
-                        dummy = dummy.filter(
-                          (newNote: any) => newNote.id !== note.id
-                        );
-
-                        setNotes(dummy);
-                        setState(dummy);
-                        toast.success("Note deleted sucessfully");
-                        router.push(
-                          dummy.length > 0 ? `/note/${dummy[0].id}` : "/"
-                        );
-                      } catch (err) {
-                        toast.error("Hmm, something went wrong");
-                      }
-                    });
-                  }}
-                >
-                  <p className="hover:text-gray-500 transition duration-150 ease-in-out p-1 rounded-md">
-                    <HiX size={17} />
-                  </p>
-                </button>
-              </div>
-            );
+            return <NoteDiv passedNote={note} />;
           })}
         </div>
         <a href="/settings">
