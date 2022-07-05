@@ -21,6 +21,7 @@ import { HiPlay } from "react-icons/hi";
 import Select from "react-select/";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Spinner } from "../../components/Spinner";
+import { recursivelyEdit } from "../../util/recursiveEdit";
 
 if (typeof navigator !== "undefined") {
   require("codemirror/mode/javascript/javascript");
@@ -114,11 +115,12 @@ const NotePage: NextPage<NotePageProps> = () => {
 
               let dummy = notesNiue;
 
-              for (const note in dummy) {
-                if (dummy[note].id === notes.id) {
-                  dummy[note].title =
-                    e.target.value.length > 0 ? e.target.value : "New Note";
-                }
+              for (const note of dummy) {
+                recursivelyEdit(
+                  note,
+                  notes.id,
+                  e.target.value.length > 0 ? e.target.value : "New Note"
+                );
               }
             }}
           />
