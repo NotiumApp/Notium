@@ -28,7 +28,7 @@ const HeroSection = () => {
             sneak peek!
           </p>
 
-          <form
+          {/* <form
             onSubmit={async (e) => {
               e.preventDefault();
 
@@ -71,23 +71,27 @@ const HeroSection = () => {
               }
             }}
             className="flex flex-col md:flex-row md:space-x-2 space-x-0 space-y-2 md:space-y-0 justify-end lg:justify-start"
-          >
-            <div className="relative w-full md:w-[25rem]">
-              <input
+          > */}
+          <div className="">
+            {/* <input
                 className="px-4 py-1 bg-fg border-2 border-accent-primary outline-none ring-variant-2 focus:ring-2 rounded-lg w-full h-[4rem] font-rubik"
                 placeholder="example@email.com"
                 type={"email"}
                 disabled={loading}
                 name="email"
-              />
+              /> */}
+
+            <div className="w-full bg-accent-primary text-white text-center text-lg font-rubik font-semibold rounded-lg px-4 py-4 md:py-2 cursor-pointer transition duration-150 ease-in-out hover:bg-[#16a085]">
+              <a href="https://notiumapp.vercel.app">Try the demo</a>
             </div>
-            <input
+          </div>
+          {/* <input
               type="submit"
               value={!loading ? "Join Waitlist" : "Submitting..."}
               disabled={loading}
               className="bg-accent-primary text-white text-sm font-rubik font-semibold rounded-xl px-4 py-4 md:py-2 cursor-pointer transition duration-150 ease-in-out hover:bg-[#16a085]"
-            />
-          </form>
+            /> */}
+          {/* </form> */}
         </div>
 
         <div>
