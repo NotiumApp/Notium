@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { HiX } from "react-icons/hi";
 import toast from "react-hot-toast";
+import { VscTriangleRight } from "react-icons/vsc";
 
 interface Notes {
   id: string;
@@ -51,13 +52,31 @@ export const Sidebar = ({
   }, [user]);
 
   const NoteDiv = ({ passedNote, child }) => {
+    const [noteExpanded, setNoteExpanded] = useState<boolean>(false);
+
     return (
       <div className="w-full space-y-1">
         <div
           className={`w-full cursor-pointer flex justify-between transition px-4 py-2 items-center hover:bg-slate-200 ${
             passedNote.id === highlighted ? "bg-slate-200" : ""
-          } ${child ? "pl-10" : ""}`}
+          } ${child ? "" : ""}`}
+          //pl-10
         >
+          <button
+            onClick={() => {
+              setNoteExpanded(!noteExpanded);
+            }}
+            className={`hover:bg-slate-300 rounded transition ease-in-out mr-2 p-[1px] ${
+              passedNote.children.length > 0 ? "" : "hidden"
+            }`}
+          >
+            <VscTriangleRight
+              className={`transition duration-150  ease-in-out ${
+                noteExpanded ? "rotate-90" : ""
+              }`}
+            />
+          </button>
+
           <Link shallow href={`/note/${passedNote.id}`} key={passedNote.id}>
             <div className={`w-full`}>
               <p>{passedNote.title}</p>
@@ -100,56 +119,53 @@ export const Sidebar = ({
               </p>
             </button>
 
-            {passedNote.children.length > 0 ? (
-              <button
-                onClick={() => {
-                  user?.getIdToken(true).then(async (idToken) => {
-                    try {
-                      const createdNote = await api({
-                        url: "/note/create/",
-                        method: "POST",
-                        headers: {
-                          Authorization: idToken,
-                        },
-                        data: {
-                          parentId: passedNote.id,
-                        },
-                      });
+            <button
+              onClick={() => {
+                user?.getIdToken(true).then(async (idToken) => {
+                  try {
+                    const createdNote = await api({
+                      url: "/note/create/",
+                      method: "POST",
+                      headers: {
+                        Authorization: idToken,
+                      },
+                      data: {
+                        parentId: passedNote.id,
+                      },
+                    });
 
-                      const { data } = await api({
-                        url: "/note/read/all",
-                        method: "POST",
-                        data: {
-                          authToken: idToken,
-                        },
-                        headers: {
-                          Authorization: idToken,
-                        },
-                      });
+                    const { data } = await api({
+                      url: "/note/read/all",
+                      method: "POST",
+                      data: {
+                        authToken: idToken,
+                      },
+                      headers: {
+                        Authorization: idToken,
+                      },
+                    });
 
-                      setState(data.notes);
+                    setState(data.notes);
 
-                      setNotes(data.notes);
-                      router.push(`/note/${createdNote.data.note.id}`);
-                    } catch (err) {
-                      console.log("err", err);
-                    }
-                  });
-                }}
-              >
-                <p className=" hover:bg-slate-300 transition duration-150 ease-in-out p-1 rounded-md">
-                  <HiPlus size={17} />
-                </p>
-              </button>
-            ) : (
-              ""
-            )}
+                    setNotes(data.notes);
+                    router.push(`/note/${createdNote.data.note.id}`);
+                  } catch (err) {
+                    console.log("err", err);
+                  }
+                });
+              }}
+            >
+              <p className=" hover:bg-slate-300 transition duration-150 ease-in-out p-1 rounded-md">
+                <HiPlus size={17} />
+              </p>
+            </button>
           </div>
         </div>
-        <div className="">
-          {passedNote.children.map((childNote) => {
-            return <NoteDiv passedNote={childNote} child={true} />;
-          })}
+        <div className="pl-10">
+          {noteExpanded &&
+            passedNote.children.map((childNote) => {
+              return <NoteDiv passedNote={childNote} child={true} />;
+            })}
         </div>
       </div>
     );
