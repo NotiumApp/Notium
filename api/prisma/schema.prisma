@@ -21,6 +21,6 @@ model Note {
   User     User?   @relation(fields: [userUid], references: [uid])
   userUid  String
   children Note[]  @relation("tree")
-  Parent   Note?   @relation("tree", fields: [parentId], references: [id])
+  Parent   Note?   @relation("tree", fields: [parentId], references: [id], onDelete: Cascade)
   parentId String?
 }
