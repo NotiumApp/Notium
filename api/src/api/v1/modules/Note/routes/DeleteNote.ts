@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { prisma } from "../../../db";
+import { recursivelyGetNotes } from "./ReadAllNotes";
 
 //Creates a new note
 export const DeleteNote = () => {
@@ -14,7 +15,34 @@ export const DeleteNote = () => {
         },
       });
 
-      res.json({ success: true, result: "Deleted Note" });
+      let notes = await prisma.note.findMany({
+        where: {
+          userUid: res.locals.user.uid,
+        },
+        include: {
+          children: true,
+        },
+      });
+
+      for (const noteIndex in notes) {
+        notes[noteIndex] = await recursivelyGetNotes(
+          notes[noteIndex],
+          res.locals.user.uid
+        );
+      }
+
+      notes = notes.filter((note) => !note.parentId);
+
+      console.log(JSON.stringify(notes));
+
+      if (!notes) {
+        res.json({
+          success: false,
+          message: "There are currently no notes after deletion",
+        });
+      } else {
+        res.json({ success: true, notes: notes });
+      }
     } catch (err) {
       res
         .status(500)

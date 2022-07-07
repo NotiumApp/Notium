@@ -97,16 +97,16 @@ export const Sidebar = ({
                         id: passedNote.id,
                       },
                     });
-                    console.log(data);
-                    let dummy: any = notes;
-                    dummy = dummy.filter(
-                      (newNote: any) => newNote.id !== passedNote.id
-                    );
-                    setNotes(dummy);
-                    setState(dummy);
+                    // console.log(data);
+                    // let dummy: any = notes;
+                    // dummy = dummy.filter(
+                    //   (newNote: any) => newNote.id !== passedNote.id
+                    // );
+                    setNotes(data.notes);
+                    setState(data.notes);
                     toast.success("Note deleted sucessfully");
                     router.push(
-                      dummy.length > 0 ? `/note/${dummy[0].id}` : "/"
+                      data.notes.length > 0 ? `/note/${data.notes[0].id}` : "/"
                     );
                   } catch (err) {
                     toast.error("Hmm, something went wrong");

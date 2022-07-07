@@ -2,7 +2,10 @@ import { Note } from "@prisma/client";
 import { Router } from "express";
 import { prisma } from "../../../db/index";
 
-async function recursivelyGetNotes(note: any, userUid: string): Promise<any> {
+export async function recursivelyGetNotes(
+  note: any,
+  userUid: string
+): Promise<any> {
   if (!note) {
     return;
   }
