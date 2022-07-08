@@ -54,6 +54,15 @@ export const Sidebar = ({
   const NoteDiv = ({ passedNote, child }) => {
     const [noteExpanded, setNoteExpanded] = useState<boolean>(false);
 
+    useEffect(() => {
+      if (
+        localStorage.getItem("expanded") &&
+        JSON.parse(localStorage.getItem("expanded")).indexOf(passedNote.id) > -1
+      ) {
+        setNoteExpanded(true);
+      }
+    }, []);
+
     return (
       <div className="w-full space-y-1">
         <div
@@ -65,6 +74,22 @@ export const Sidebar = ({
           <button
             onClick={() => {
               setNoteExpanded(!noteExpanded);
+
+              if (
+                localStorage.getItem("expanded") &&
+                JSON.parse(localStorage.getItem("expanded")).indexOf(
+                  passedNote.id
+                ) > -1
+              ) {
+                const dummy = (
+                  JSON.parse(localStorage.getItem("expanded")) || []
+                ).filter((noteInLocal) => noteInLocal !== passedNote.id);
+                localStorage.setItem("expanded", JSON.stringify(dummy));
+              } else {
+                let dummy = JSON.parse(localStorage.getItem("expanded")) || [];
+                dummy.push(passedNote.id);
+                localStorage.setItem("expanded", JSON.stringify(dummy));
+              }
             }}
             className={`hover:bg-slate-300 rounded transition ease-in-out mr-2 p-[1px] ${
               passedNote.children.length > 0 ? "" : "hidden"
@@ -97,6 +122,18 @@ export const Sidebar = ({
                         id: passedNote.id,
                       },
                     });
+
+                    if (
+                      localStorage.getItem("expanded") &&
+                      JSON.parse(localStorage.getItem("expanded")).indexOf(
+                        passedNote.id
+                      ) > -1
+                    ) {
+                      const dummy = JSON.parse(
+                        localStorage.getItem("expanded")
+                      ).filter((noteInLocal) => noteInLocal !== passedNote.id);
+                      localStorage.setItem("expanded", JSON.stringify(dummy));
+                    }
                     // console.log(data);
                     // let dummy: any = notes;
                     // dummy = dummy.filter(
