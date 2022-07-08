@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { prisma } from "../../../db/index";
+import { recursivelyGetNotes } from "./ReadAllNotes";
 
 //Reads a specific note
 export const ReadNoteById = () => {
@@ -21,6 +22,11 @@ export const ReadNoteById = () => {
       if (!note) {
         res.json({ success: false, message: "That note doesn't exist!" });
       } else {
+        // const recursivedNote = await recursivelyGetNotes(
+        //   note,
+        //   res.locals.user.uid
+        // );
+        // res.json({ success: true, note: recursivedNote });
         res.json({ success: true, note: note });
       }
     } catch (err) {
