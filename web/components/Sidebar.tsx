@@ -51,8 +51,10 @@ export const Sidebar = ({
     });
   }, [user]);
 
-  const NoteDiv = ({ passedNote, child }) => {
+  const NoteDiv = ({ passedNote, child, level }) => {
     const [noteExpanded, setNoteExpanded] = useState<boolean>(false);
+
+    const newLevel = level;
 
     useEffect(() => {
       if (
@@ -70,6 +72,7 @@ export const Sidebar = ({
             passedNote.id === highlighted ? "bg-slate-200" : ""
           } ${child ? "" : ""}`}
           //pl-10
+          style={{ paddingLeft: `${level + 1}rem` }}
         >
           <button
             onClick={() => {
@@ -91,20 +94,23 @@ export const Sidebar = ({
                 localStorage.setItem("expanded", JSON.stringify(dummy));
               }
             }}
-            className={`hover:bg-slate-300 rounded transition ease-in-out mr-2 p-[1px] ${
-              passedNote.children.length > 0 ? "" : "hidden"
+            className={`hover:bg-slate-300 rounded transition ease-in-out mr-2 p-[2px] ${
+              passedNote.children.length > 0 ? "" : ""
             }`}
           >
             <VscTriangleRight
               className={`transition duration-150  ease-in-out ${
                 noteExpanded ? "rotate-90" : ""
               }`}
+              size={12}
             />
           </button>
 
           <Link shallow href={`/note/${passedNote.id}`} key={passedNote.id}>
             <div className={`w-full`}>
-              <p>{passedNote.title}</p>
+              <p>
+                {passedNote.title} {level}
+              </p>
             </div>
           </Link>
           <div className="flex">
@@ -198,10 +204,16 @@ export const Sidebar = ({
             </button>
           </div>
         </div>
-        <div className="pl-10">
+        <div className="">
           {noteExpanded &&
             passedNote.children.map((childNote) => {
-              return <NoteDiv passedNote={childNote} child={true} />;
+              return (
+                <NoteDiv
+                  passedNote={childNote}
+                  child={true}
+                  level={newLevel + 1}
+                />
+              );
             })}
         </div>
       </div>
@@ -254,7 +266,7 @@ export const Sidebar = ({
             </button>
           </div>
           {notes.map((note: Notes, i) => {
-            return <NoteDiv passedNote={note} child={false} />;
+            return <NoteDiv passedNote={note} child={false} level={0} />;
           })}
         </div>
         <a href="/settings">
