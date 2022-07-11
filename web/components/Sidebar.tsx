@@ -66,9 +66,9 @@ export const Sidebar = ({
     }, []);
 
     return (
-      <div className="w-full space-y-1">
+      <div className="w-full">
         <div
-          className={`w-full cursor-pointer flex justify-between transition px-4 py-2 items-center hover:bg-slate-200 ${
+          className={`w-full cursor-pointer flex justify-between transition px-4 py-1 items-center hover:bg-slate-200 ${
             passedNote.id === highlighted ? "bg-slate-200" : ""
           } ${child ? "" : ""}`}
           //pl-10
@@ -108,9 +108,7 @@ export const Sidebar = ({
 
           <Link shallow href={`/note/${passedNote.id}`} key={passedNote.id}>
             <div className={`w-full`}>
-              <p>
-                {passedNote.title} {level}
-              </p>
+              <p className="text-sm">{passedNote.title}</p>
             </div>
           </Link>
           <div className="flex">
@@ -223,7 +221,7 @@ export const Sidebar = ({
   return (
     <>
       <div className="bg-slate-100 fixed z-40 w-72 left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
-        <div className="px-0 overflow-auto space-y-1">
+        <div className="px-0 overflow-auto">
           <div className="flex justify-between mx-2 mb-2">
             <p className="text-base font-bold">Your notes</p>
             <button
