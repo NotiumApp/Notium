@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { HiX } from "react-icons/hi";
 import toast from "react-hot-toast";
 import { VscTriangleRight } from "react-icons/vsc";
-
+import {Resizable} from 're-resizable';
 interface Notes {
   id: string;
   title: string;
@@ -28,10 +28,18 @@ export const Sidebar = ({
   const [notes, setNotes] = useState<Notes[]>([]);
 
   const [open, setOpen] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState(300)
   const notesNiue = useStore(null);
   const router = useRouter();
 
   useEffect(() => {
+    if(localStorage.getItem("sidebarWidth")){
+      setSidebarWidth(parseInt(localStorage.getItem("sidebarWidth")))
+      console.log("no", sidebarWidth)
+    }else{
+      console.log("bruv")
+    }
+
     user?.getIdToken(true).then(async (idToken) => {
       const { data } = await api({
         url: "/note/read/all",
@@ -218,9 +226,16 @@ export const Sidebar = ({
     );
   };
 
+
   return (
-    <>
-      <div className="bg-slate-100 fixed z-40 w-72 left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
+    <Resizable enable={{right:true}} style={{position:"fixed", left:0, top:0}} onResizeStop={(e, direction, ref, d) => {
+      localStorage.setItem("sidebarWidth", (sidebarWidth+d.width).toString())
+      console.log("changed!", localStorage.getItem("sidebarWidth"))
+      
+    }}  defaultSize={{width:`${sidebarWidth}px`, height:"500PX"}} maxWidth="400px" minWidth={"250px"}>
+      
+
+      <div className="w-auto bg-slate-100 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
         <div className="px-0 overflow-auto">
           <div className="flex justify-between mx-2 mb-2">
             <p className="text-base font-bold">Your notes</p>
@@ -286,6 +301,6 @@ export const Sidebar = ({
           </div>
         </a>
       </div>
-    </>
+    </Resizable>
   );
 };

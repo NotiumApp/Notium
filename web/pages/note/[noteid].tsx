@@ -96,7 +96,7 @@ const NotePage: NextPage<NotePageProps> = () => {
   return (
     <div className="flex">
       <Sidebar highlighted={router.query.noteid?.toString()} />
-      <div className="ml-72 h-[90vh] w-full">
+      <div className="ml-60 h-[90vh] w-full">
         <div className="py-4">
           <input
             value={notesTitle}
