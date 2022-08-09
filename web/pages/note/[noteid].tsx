@@ -23,10 +23,10 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Spinner } from "../../components/Spinner";
 import { recursivelyEdit } from "../../util/recursiveEdit";
 
-if (typeof navigator !== "undefined") {
-  require("codemirror/mode/javascript/javascript");
-  require("codemirror/mode/markdown/markdown");
-}
+// if (typeof navigator !== "undefined") {
+//   require("codemirror/mode/javascript/javascript");
+//   require("codemirror/mode/markdown/markdown");
+// }
 
 interface NotePageProps {
   notes: any;
