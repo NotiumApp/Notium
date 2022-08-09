@@ -28,16 +28,18 @@ export const Sidebar = ({
   const [notes, setNotes] = useState<Notes[]>([]);
 
   const [open, setOpen] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(300)
+  const [sidebarWidth, setSidebarWidth] = useState<number>(null)
   const notesNiue = useStore(null);
   const router = useRouter();
+
+
 
   useEffect(() => {
     if(localStorage.getItem("sidebarWidth")){
       setSidebarWidth(parseInt(localStorage.getItem("sidebarWidth")))
-      console.log("no", sidebarWidth)
     }else{
-      console.log("bruv")
+      setSidebarWidth(300)
+      
     }
 
     user?.getIdToken(true).then(async (idToken) => {
@@ -228,11 +230,13 @@ export const Sidebar = ({
 
 
   return (
+
+    sidebarWidth !== null ? 
     <Resizable enable={{right:true}} style={{position:"fixed", left:0, top:0}} onResizeStop={(e, direction, ref, d) => {
       localStorage.setItem("sidebarWidth", (sidebarWidth+d.width).toString())
       console.log("changed!", localStorage.getItem("sidebarWidth"))
       
-    }}  defaultSize={{width:`${sidebarWidth}px`, height:"500PX"}} maxWidth="400px" minWidth={"250px"}>
+    }}  defaultSize={{width:`${sidebarWidth}px`, height:"500px"}} maxWidth="400px" minWidth={"250px"}>
       
 
       <div className="w-auto bg-slate-100 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
@@ -302,5 +306,5 @@ export const Sidebar = ({
         </a>
       </div>
     </Resizable>
-  );
+   : <></>);
 };
