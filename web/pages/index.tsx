@@ -27,7 +27,7 @@ const Home: NextPage = () => {
     <>
       <div className="flex">
         <Sidebar />
-        <div className="ml-72 w-full h-screen flex items-center justify-center">
+        <div className="w-full h-screen flex items-center justify-center">
           <div className="max-w-xl space-y-2">
             <h2>
               Hey

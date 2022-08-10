@@ -106,7 +106,7 @@ const NotePage: NextPage<NotePageProps> = ({ noteid }) => {
   return (
     <div className="flex">
       <Sidebar highlighted={router.query.noteid?.toString()} />
-      <div className="ml-56 h-[90vh] w-full">
+      <div className="h-[90vh] w-full px-4">
         <div className="py-4">
           <input
             value={notesTitle}
@@ -201,9 +201,9 @@ const NotePage: NextPage<NotePageProps> = ({ noteid }) => {
           <Editor
             height="80vh"
             defaultLanguage="markdown"
-            defaultValue="// some comment"
             className="pt-4"
             width={"50vw"}
+            value={body}
             onChange={(value) => {
               setBody(value);
               socket?.emit("update", value);
@@ -211,7 +211,7 @@ const NotePage: NextPage<NotePageProps> = ({ noteid }) => {
           />
 
           <ReactMarkdown
-            className={`h-[80vh] p-4 overflow-y-auto prose w-1/2 ${
+            className={`h-[80vh] p-4 overflow-y-auto break-words prose w-1/2 ${
               view === "rendered" || view === "both" ? "" : "hidden"
             } ${view === "rendered" ? "w-3/4 mx-auto" : "w-1/2"}`}
             remarkPlugins={[remarkGfm]}
