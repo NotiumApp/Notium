@@ -210,8 +210,10 @@ const NotePage: NextPage<NotePageProps> = ({ noteid }) => {
             }}
           />
 
+          {/* */}
+
           <ReactMarkdown
-            className={`h-[80vh] p-4 overflow-y-auto break-words prose w-1/2 ${
+            className={`h-[80vh] p-4 overflow-y-auto break-words prose prose-h1:text-[28px] prose-h2:text-[24px] prose-h3:text-[20px] prose-h4:text-[16px] prose-p:text-[16px] prose-headings:font-bold  w-1/2 ${
               view === "rendered" || view === "both" ? "" : "hidden"
             } ${view === "rendered" ? "w-3/4 mx-auto" : "w-1/2"}`}
             remarkPlugins={[remarkGfm]}

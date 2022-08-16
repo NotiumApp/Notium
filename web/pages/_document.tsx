@@ -21,7 +21,7 @@ export default function Document() {
 
       <Toaster position="top-right" reverseOrder={true} />
 
-      <body className="container">
+      <body className="">
         <Main />
         <NextScript />
       </body>
