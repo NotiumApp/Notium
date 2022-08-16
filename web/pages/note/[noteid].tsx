@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { api } from "../../util/api";
 import { auth } from "../../util/initFirebase";
 import { setState, useStore, Sidebar } from "../../components/Sidebar";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
@@ -12,7 +12,14 @@ import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import io, { Socket } from "socket.io-client";
 import piston from "piston-client";
 
-import { UnControlled as CodeMirror } from "react-codemirror2";
+import { UnControlled as CodeMirror2 } from "react-codemirror2";
+
+import CodeMirror from "@uiw/react-codemirror";
+import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+import { languages } from "@codemirror/language-data";
+import { githubLight } from "@uiw/codemirror-theme-github";
+
+import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
 
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/neo.css";
@@ -23,16 +30,18 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { Spinner } from "../../components/Spinner";
 import { recursivelyEdit } from "../../util/recursiveEdit";
 
-if (typeof navigator !== "undefined") {
-  require("codemirror/mode/javascript/javascript");
-  require("codemirror/mode/markdown/markdown");
-}
+// if (typeof navigator !== "undefined") {
+//   require("codemirror/mode/javascript/javascript");
+//   require("codemirror/mode/markdown/markdown");
+// }
 
 interface NotePageProps {
-  notes: any;
+  // notes: any;
+  noteid: string;
 }
+
 type View = "markdown" | "rendered" | "both";
-const NotePage: NextPage<NotePageProps> = () => {
+const NotePage: NextPage<NotePageProps> = ({ noteid }) => {
   const [notes, setNotesMetaData] = useState<any>({});
   const [notesTitle, setNotesTitle] = useState<any>("");
   const router = useRouter();
@@ -58,6 +67,7 @@ const NotePage: NextPage<NotePageProps> = () => {
     });
 
     user?.getIdToken(true).then(async (idToken) => {
+      console.log(router.query.noteid, "eeee");
       const newSocket = io(
         process.env.NEXT_PUBLIC_SOCKET_API_URL || "http://localhost:5000",
         {
@@ -65,7 +75,7 @@ const NotePage: NextPage<NotePageProps> = () => {
             authToken: idToken,
           },
           query: {
-            noteId: router.query.noteid,
+            noteId: noteid,
           },
         }
       );
@@ -96,7 +106,7 @@ const NotePage: NextPage<NotePageProps> = () => {
   return (
     <div className="flex">
       <Sidebar highlighted={router.query.noteid?.toString()} />
-      <div className="ml-72 h-[90vh] w-full">
+      <div className="h-[90vh] w-full px-4">
         <div className="py-4">
           <input
             value={notesTitle}
@@ -138,8 +148,8 @@ const NotePage: NextPage<NotePageProps> = () => {
           <option value="rendered">Rendered</option>
           <option value={"both"}>Both</option>
         </select>
-        <div className="w-full flex">
-          <CodeMirror
+        <div className="w-full flex overflow-y-auto">
+          {/* <CodeMirror2
             value={initialBody}
             options={{
               mode: "markdown",
@@ -151,16 +161,57 @@ const NotePage: NextPage<NotePageProps> = () => {
               setBody(value);
               socket?.emit("update", value);
             }}
-            className={`overflow-y-auto h-full  pt-4  ${
+            // className={`overflow-y-auto h-full  pt-4  ${
+            //   view === "markdown" || view === "both" ? "" : "hidden"
+            // } ${view === "markdown" ? "w-3/4 mx-auto h-full" : "w-1/2"} ${
+            //   view === "both" ? "max-w-3xl" : ""
+            // }
+            className={`overflow-y-auto h-full  pt-4
+            `}
+          /> */}
+
+          {/* <CodeMirror
+            onChange={useCallback((value, viewUpdate) => {
+              console.log("value:", value);
+
+              setBody(value);
+              socket?.emit("update", value);
+              console.log(socket);
+            }, [])}
+            value={body}
+            theme={githubLight}
+            basicSetup={{
+              highlightActiveLine: false,
+              highlightActiveLineGutter: false,
+              syntaxHighlighting: true,
+              autocompletion: true,
+            }}
+            height="500px"
+            extensions={[
+              markdown({ base: markdownLanguage, codeLanguages: languages }),
+            ]}
+            className={`text-[1rem] overflow-y-auto   pt-4  ${
               view === "markdown" || view === "both" ? "" : "hidden"
             } ${view === "markdown" ? "w-3/4 mx-auto h-full" : "w-1/2"} ${
               view === "both" ? "max-w-3xl" : ""
             }
             `}
+          /> */}
+
+          <Editor
+            height="80vh"
+            defaultLanguage="markdown"
+            className="pt-4"
+            width={"50vw"}
+            value={body}
+            onChange={(value) => {
+              setBody(value);
+              socket?.emit("update", value);
+            }}
           />
 
           <ReactMarkdown
-            className={`h-full p-4 overflow-y-auto prose w-1/2 ${
+            className={`h-[80vh] p-4 overflow-y-auto break-words prose w-1/2 ${
               view === "rendered" || view === "both" ? "" : "hidden"
             } ${view === "rendered" ? "w-3/4 mx-auto" : "w-1/2"}`}
             remarkPlugins={[remarkGfm]}
@@ -300,6 +351,14 @@ const NotePage: NextPage<NotePageProps> = () => {
       </div>
     </div>
   );
+};
+
+NotePage.getInitialProps = (ctx) => {
+  const { noteid } = ctx.query;
+  const returnData: NotePageProps = {
+    noteid: noteid.toString(),
+  };
+  return returnData;
 };
 
 export default NotePage;

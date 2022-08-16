@@ -163,7 +163,6 @@ export class Server {
       socket.on("update", async (body: string) => {
         try {
           socket.broadcast.to(noteId).emit("update", body);
-
           const res = await prisma.note.updateMany({
             where: {
               id: noteId.toString(),

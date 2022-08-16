@@ -48,7 +48,7 @@ const Login: NextPage = () => {
   return (
     <>
       <Meta title="Login | Notium" />
-      <div className="h-screen grid place-items-center">
+      <div className="h-screen grid place-items-center mx-auto w-screen">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2 text-center">
             <h2 className="font-semibold">notium.sh</h2>

@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { HiX } from "react-icons/hi";
 import toast from "react-hot-toast";
 import { VscTriangleRight } from "react-icons/vsc";
-
+import { Resizable } from "re-resizable";
 interface Notes {
   id: string;
   title: string;
@@ -28,10 +28,17 @@ export const Sidebar = ({
   const [notes, setNotes] = useState<Notes[]>([]);
 
   const [open, setOpen] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState<number>(null);
   const notesNiue = useStore(null);
   const router = useRouter();
 
   useEffect(() => {
+    if (localStorage.getItem("sidebarWidth")) {
+      setSidebarWidth(parseInt(localStorage.getItem("sidebarWidth")));
+    } else {
+      setSidebarWidth(300);
+    }
+
     user?.getIdToken(true).then(async (idToken) => {
       const { data } = await api({
         url: "/note/read/all",
@@ -218,9 +225,23 @@ export const Sidebar = ({
     );
   };
 
-  return (
-    <>
-      <div className="bg-slate-100 fixed z-40 w-72 left-0 top-0 h-screen flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
+  return sidebarWidth !== null ? (
+    <Resizable
+      enable={{ right: true }}
+      // style={{ left: 0, top: 0 }}
+      onResizeStop={(e, direction, ref, d) => {
+        localStorage.setItem(
+          "sidebarWidth",
+          (sidebarWidth + d.width).toString()
+        );
+        console.log("changed!", localStorage.getItem("sidebarWidth"));
+      }}
+      defaultSize={{ width: `${sidebarWidth}px`, height: "100vh" }}
+      // handleWrapperClass="border border-red-500"
+      maxWidth="400px"
+      minWidth={"250px"}
+    >
+      <div className=" bg-slate-100 h-screen left-0 top-0 flex flex-col justify-between space-y-3 overflow-y-auto pt-4">
         <div className="px-0 overflow-auto">
           <div className="flex justify-between mx-2 mb-2">
             <p className="text-base font-bold">Your notes</p>
@@ -286,6 +307,8 @@ export const Sidebar = ({
           </div>
         </a>
       </div>
-    </>
+    </Resizable>
+  ) : (
+    <></>
   );
 };
