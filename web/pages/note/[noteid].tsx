@@ -12,12 +12,8 @@ import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import io, { Socket } from "socket.io-client";
 import piston from "piston-client";
 
-import { UnControlled as CodeMirror2 } from "react-codemirror2";
-
-import CodeMirror from "@uiw/react-codemirror";
-import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-import { languages } from "@codemirror/language-data";
-import { githubLight } from "@uiw/codemirror-theme-github";
+import MathJax from "react-mathjax";
+import RemarkMathPlugin from "remark-math";
 
 import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
 
@@ -222,7 +218,7 @@ const NotePage: NextPage<NotePageProps> = ({ noteid }) => {
             className={`h-[80vh] p-4 overflow-y-auto break-words prose prose-h1:text-[28px] prose-h2:text-[24px] prose-h3:text-[20px] prose-h4:text-[16px] prose-p:text-[16px] prose-headings:font-bold  w-1/2 ${
               view === "rendered" || view === "both" ? "" : "hidden"
             } ${view === "rendered" ? "w-full mx-auto mt-4" : "w-1/2"}`}
-            remarkPlugins={[remarkGfm]}
+            remarkPlugins={[remarkGfm, RemarkMathPlugin]}
             children={
               body
               //  ||
