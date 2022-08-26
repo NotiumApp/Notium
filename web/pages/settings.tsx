@@ -41,18 +41,29 @@ const Settings: NextPage = () => {
   return (
     <>
       {/* <div className=""> */}
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto my-8">
         <h2>Settings</h2>
         <hr className="mt-2 mb-4" />
 
         <div className="space-y-4">
-          <div>
-            <p className="text-2xl font-bold">Profile</p>
-            <p className="text-gray-500">
-              This information is not public and will not be shown to anybody.
-            </p>
+          <div>{/* <p className="text-2xl font-bold">Profile</p> */}</div>
+          <div className="w-max flex flex-col justify-center mx-auto">
+            {/* TODO: fix this to actual default avatar */}
+            <img
+              src={
+                user?.photoURL ||
+                `https://avatars.dicebear.com/api/bottts/${name}.svg`
+              }
+              className="w-40 h-40 rounded-full"
+            />
+            <div className="-translate-y-14 -translate-x-2 flex">
+              <button className="flex items-center justify-center rounded-full border border-gray-300 bg-slate-100 hover:bg-slate-200 p-3 transition duration-150 ease-in-out space-x-2">
+                <HiOutlinePencil size={17} />{" "}
+                {/* <p className="font-medium">Edit</p> */}
+              </button>
+            </div>
           </div>
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center justify-center space-x-8 w-full">
             <div className="space-y-6 w-1/2">
               <div>
                 <div className="flex flex-col space-y-2">
@@ -113,22 +124,6 @@ const Settings: NextPage = () => {
                   />
                 </div>
               </div> */}
-            </div>
-            <div className="space-y-2">
-              {/* TODO: fix this to actual default avatar */}
-              <img
-                src={
-                  user?.photoURL ||
-                  `https://avatars.dicebear.com/api/bottts/${name}.svg`
-                }
-                className="w-40 h-40 rounded-full"
-              />
-              <div className="flex justify-center">
-                <button className="flex items-center justify-center rounded-md hover:bg-slate-200 py-1 px-4 transition duration-150 ease-in-out space-x-2">
-                  <HiOutlinePencil size={17} />{" "}
-                  <p className="font-medium">Edit</p>
-                </button>
-              </div>
             </div>
           </div>
         </div>
